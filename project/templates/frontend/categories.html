@@ -1,0 +1,45 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="text-md text-2xl font-primary select-none">
+    <span class="text-accent-200">#</span>
+    <span class="text-white">
+        Categories
+    </span>
+</div>
+
+<div class="mx-auto w-1/2 my-4">
+    <input id="filter-categories" type="text" onkeyup="filter()" class="w-full bg-secondary border-quarternary rounded-md font-primary ring-0 focus:ring-0 focus:border-ternary text-white" placeholder="Search categories">
+</div>
+
+<div class="grid grid-cols-5 gap-4" id="categories">
+    {% for category in categories %}
+        <a href="/category/{{ category.id }}" class="px-4 py-2 font-normal bg-secondary rounded-md border border-secondary text-gray-400 hover:border-ternary hover:text-white transition">
+            {{ category.name }}
+        </a>       
+    {% endfor %}
+</div>
+
+<script>
+    function filter() {
+      // Declare variables
+      var input, filter, div, li, a, i, txtValue;
+      input = document.getElementById('filter-categories');
+      filter = input.value.toUpperCase();
+      div = document.getElementById("categories");
+      a = div.getElementsByTagName('a');
+    
+      // Loop through all list items, and hide those who don't match the search query
+      for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+      }
+    }
+    </script>
+
+{% endblock %}

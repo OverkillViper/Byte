@@ -1,0 +1,59 @@
+{% extends 'moderator/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="m-7 w-2/3 mx-auto">
+    <div class="flex items-center justify-between">
+        <div>
+            <div class="text-3xl text-white font-primary">{{ account.get_full_name }}</div>
+            <div class="text-lg text-accent-200 font-normal">{{ account.email }}</div>
+        </div>
+        <div class="mt-20 rounded-full outline outline-2 outline-gray-400 w-28 2xl:w-36 overflow-hidden outline-offset-2">
+            <img src="{% static 'images/avatar.png' %}" alt="" class="bg-white">
+        </div>
+    </div>
+    <hr class="-mt-12 me-10 border border-ternary">
+    <div class="grid grid-cols-5 mt-10">
+        <div class="text-accent-200 font-primary">First name</div>
+        <div class="text-white font-normal col-span-4">{{ account.first_name }}</div>
+        <div class="text-accent-200 font-primary">Last name</div>
+        <div class="text-white font-normal col-span-4">{{ account.last_name }}</div>
+        <div class="text-accent-200 font-primary">Email</div>
+        <div class="text-white font-normal col-span-4 flex">
+            {{ account.email }}
+            {% if account.email_verified %}
+            <svg class="ms-2 w-6 h-6 text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
+            </svg>
+            {% endif %}
+        </div>
+        <div class="text-accent-200 font-primary">Phone</div>
+        <div class="text-white font-normal col-span-4">{{ account.phone }}</div>
+        <div class="text-accent-200 font-primary">Role</div>
+        <div class="text-white font-normal col-span-4 capitalize">{{ account.role }}</div>
+        <div class="text-accent-200 font-primary">Date joined</div>
+        <div class="text-white font-normal col-span-4 capitalize">{{ account.created_at }}</div>
+    </div>
+    <hr class="my-6 border border-ternary">
+    {% if account.role == 'customer' %}
+    <div class="grid grid-cols-5 mt-10">
+        <div class="text-accent-200 font-primary">Standing Orders</div>
+        <div class="text-white font-normal col-span-4">{{ orders }}</div>
+        <div class="text-accent-200 font-primary">Product Bought</div>
+        <div class="text-white font-normal col-span-4">{{ products_bought }}</div>
+    </div>
+    {% elif account.role == 'seller' %}
+    <div class="grid grid-cols-5 mt-10">
+        <div class="text-accent-200 font-primary">Stores</div>
+        <div class="text-white font-normal col-span-4">{{ stores }}</div>
+        <div class="text-accent-200 font-primary">Products</div>
+        <div class="text-white font-normal col-span-4">{{ product_count }}</div>
+        <div class="text-accent-200 font-primary">Sales</div>
+        <div class="text-white font-normal col-span-4">{{ sales }}</div>
+        <div class="text-accent-200 font-primary">Avarage rating</div>
+        <div class="text-white font-normal col-span-4">{{ average_rating|floatformat:2 }}</div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

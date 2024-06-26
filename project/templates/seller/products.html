@@ -1,0 +1,40 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex px-8 py-4 justify-end items-center">
+    <div class="text-white font-primary">Sort by:</div>
+    <div class="text-white font-normal text-sm">
+        <div id="filterDropdownBtn" data-dropdown-toggle="filters" class="ms-2 bg-quarternary rounded-md px-4 py-2 flex items-center cursor-default hover:bg-ternary transition capitalize">
+            {% if request.GET.filter is None %}
+            Newest
+            {% else %}
+            {{ request.GET.filter }}
+            {% endif %}
+            <svg class="w-5 h-5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/>
+            </svg>          
+        </div>
+        <div id="filters" class="hidden bg-quarternary w-32 text-gray-400 font-normal rounded-md border border-ternary shadow-lg">
+            <ul class="py-2">
+                <li class="px-4 py-1"><a href="/seller/products" class="hover:text-white transition">Newest</a></li>
+                <li class="px-4 py-1"><a href="/seller/products?filter=oldest" class="hover:text-white transition">Oldest</a></li>
+                <li class="px-4 py-1"><a href="/seller/products?filter=popular" class="hover:text-white transition">Popularity</a></li>
+                <li class="px-4 py-1"><a href="/seller/products?filter=published" class="hover:text-white transition">Published</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-2 2xl:grid-cols-3 px-8 py-4 gap-4">
+    {% if products %}
+        {% for product in products %}
+            {% include 'product/product_card_store.html' %}
+        {% endfor %}
+    {% else %}
+        <div class="mx-auto col-span-5 text-gray-400 font-normal">There is currently no product registered under this store</div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

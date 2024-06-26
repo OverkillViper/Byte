@@ -1,0 +1,44 @@
+<div id="notifications" class="z-20 w-full max-w-sm pe-5 hidden" aria-labelledby="notificationButton">
+    <div class="bg-quarternary rounded-lg border border-ternary shadow-md">
+        <div class="flex items-center bg-secondary text-sm justify-between px-4 py-2 rounded-t-lg">
+            <div class="font-primary text-white ">
+                Notifications
+            </div>
+            {% if notifications %}
+            <a href="/account/delete-all-notifications" class="text-accent-200 hover:underline font-primary">Clear all</a>
+            {% endif %}
+        </div>
+
+        <div>
+            {% if notifications %}
+            {% for notification in notifications %}
+            <div  class="flex px-4 py-2 items-center text-sm text-gray-400">
+                
+                <div class="w-3 h-3 min-w-3 {% if notification.seen %} bg-ternary {% else %} bg-accent-200 {% endif %}rounded-full me-4"></div>
+                <a href="/account/notification-link/{{ notification.id }}/?ref={{ notification.ref }}" class="flex-grow hover:text-white transition">
+                    <div class="font-primary text-accent-200">{{ notification.title }}</div>
+                    <div class="font-normal line-clamp-1">{{ notification.content }}</div>
+                </a>
+                <a href="/account/delete-notification/{{ notification.id }}">
+                    <svg class="w-6 h-6 text-gray-400 hover:text-white transition" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>                  
+                </a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="px-4 py-2 text-center text-gray-400 font-normal text-sm select-none">
+            You have no notification
+            </div>
+            {% endif %}
+        </div>
+        {% if notifications %}
+        <div class="flex bg-secondary hover:text-white transition text-gray-400 rounded-b-lg px-4 py-2 font-primary text-sm">
+            <a href="/account/notifications" class="text-center mx-auto">
+                View all
+            </a>
+        </div>
+        
+        {% endif %}
+    </div>
+</div>

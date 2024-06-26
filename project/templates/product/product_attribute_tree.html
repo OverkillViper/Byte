@@ -1,0 +1,21 @@
+<li class="">
+    <div class="flex font-primary items-center">
+        <div class="{% if item.attribute.value != '' %}min-w-52{% endif %} py-1 me-6">
+            {{ item.attribute.name }}
+        </div>
+        <div class="font-normal text-gray-400">
+            {{ item.attribute.value }}
+        </div>
+    </div>
+    
+    {% if item.children %}
+        <ul class="ms-4">
+            {% for child in item.children %}
+                {% include "product/product_attribute_tree.html" with item=child %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if item.attribute.value == '' and not forloop.last %}
+    <hr class="border-1 border-quarternary my-2">
+    {% endif %}
+</li>

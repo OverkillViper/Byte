@@ -1,0 +1,150 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% load markdownify %}
+{% block content %}
+
+<div class="flex flex-col">
+    <div class="w-3/4 mx-auto flex mt-10 space-x-10">
+        <div class="basis-1/3">
+            <img src="{{ galleries.0.image.url }}" alt="product_image" class="rounded-lg" id="imagePreview">
+            <div class="grid grid-cols-5 mt-2 2xl:mt-4 gap-x-2 2xl:gap-x-4">
+                {% for gallery in galleries %}
+                    <img src="{{ gallery.image.url }}" alt="" class="rounded-md cursor-pointer" onclick="showPreview(this)">
+                {% endfor %}
+            </div>
+        </div>
+        <div class="basis-2/3 flex flex-col justify-between">
+            <div class="text-white font-primary text-xl">
+                {{ product.name }}
+            </div>
+            <div class="grid grid-cols-5 mt-6 2xl:mt-10">
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Price</div><div class="font-normal text-white col-span-3 2xl:col-span-4">৳ {{ product.price }}</div>
+                {% if product.discount > 0 %}
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Discount Price</div><div class="font-normal text-white col-span-3 2xl:col-span-4">৳ {{ product.discounted_price|floatformat:0 }}</div>
+                {% endif %}
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Brand</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.brand }}</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Model</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.model }}</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Stock</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{% if product.in_stock %}In Stock{% else %}Out of stock{% endif %}</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Warranty</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.warranty }} year(s)</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Total Sold</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.itemSold }}</div>
+            </div>
+            <div class="px-4 py-2 rounded-md {% if product.published %} bg-accent-200 {% else %} bg-ternary {% endif %} mt-2 2xl:mt-10 w-32 font-primary text-center {% if product.published %} text-black {% else %} text-white {% endif %}">
+                {% if product.published %} Published {% else %} Unpublished {% endif %}
+            </div>
+            <div class="flex mt-4 2xl:mt-10 space-x-2 2xl:space-x-4 justify-end text-sm">
+                {% if product.in_stock %}
+                <a href="/product/out-stock/{{ product.id }}" class="flex bg-quarternary text-white font-primary link-button items-center px-4 py-2 space-x-2 rounded-md">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m6 6 12 12m3-6a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>                      
+                    <span class="uppercase">Out Stock</span>
+                </a>
+                {% else %}
+                <a href="/product/in-stock/{{ product.id }}" class="flex bg-quarternary text-white font-primary link-button items-center px-4 py-2 space-x-2 rounded-md">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
+                    </svg>                                            
+                    <span class="uppercase">In Stock</span>
+                </a>
+                {% endif %}
+                {% if product.published %}
+                <a href="/product/unpublish/{{ product.id }}" class="flex bg-quarternary text-white font-primary link-button items-center px-4 py-2 space-x-2 rounded-md">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+                    </svg>
+                    <span class="uppercase">Unpublish</span>
+                </a>
+                {% else %}
+                <a href="/product/publish/{{ product.id }}" class="flex bg-quarternary text-white font-primary link-button items-center px-4 py-2 space-x-2 rounded-md">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"/>
+                    </svg>
+                    <span class="uppercase">Publish</span>
+                </a>
+                {% endif %}
+                <a href="/product/delete-product/{{ product.id }}" class="flex bg-red-400 text-black font-primary link-button items-center px-4 py-2 space-x-2 rounded-md">
+                    <svg class="w-4 h-4 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                    </svg>
+                    <span class="uppercase text-black">Delete</span>
+                </a>
+                <a href="/product/edit-product/{{ product.id }}" class="flex bg-quarternary text-white font-primary link-button items-center px-4 py-2 space-x-2 rounded-md">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                    </svg> 
+                    <span class="uppercase">Edit</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr class="border-1 border-ternary my-6 w-3/4 mx-auto">
+    <div class="w-3/4 mx-auto flex items-center">
+        <div class=" text-accent-300 font-primary text-lg">Store</div>
+        <a class=" text-white font-normal bg-quarternary px-4 py-2 rounded-md ms-6 link-button" href="/seller/store/details/{{ product.store.id }}">
+            {{ product.store.name }}
+        </a>
+    </div>
+    
+    <hr class="border-1 border-ternary my-6 w-3/4 mx-auto">
+    <div class="w-3/4 mx-auto text-accent-300 font-primary text-lg">Description</div>
+    <div class="w-3/4 mx-auto text-white font-normal">
+        {{ product.description|markdownify }}
+    </div>
+    <hr class="border-1 border-ternary my-6 w-3/4 mx-auto">
+    <div class="w-3/4 mx-auto text-accent-300 font-primary text-lg">Product Attributes</div>
+    <div class="w-3/4 mx-auto">
+        <form action="/product/add-attribute/{{product.id}}" method="POST" class="mt-2 flex items-center space-x-2">
+            {% csrf_token %}
+            <input type="hidden" name="parent_attr" id="parent_attr" value="">
+            <label for="name" class="font-primary text-white text-sm">Name:</label>
+            <input type="text" name="name" id="name" class="px-2 py-1 text-sm text-white bg-quarternary rounded-md border font-normal border-ternary focus:ring-0 focus:border-gray-400">
+            <label for="value" class="font-primary text-white text-sm">Value:</label>
+            <input type="text" name="value" id="value" class="px-2 py-1 text-sm text-white bg-quarternary rounded-md border font-normal border-ternary focus:ring-0 focus:border-gray-400" placeholder="Keep blank to make parent">
+            <button class="text-white items-center font-normal p-2 rounded-md bg-quarternary text-sm link-button">
+                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                </svg>
+            </button>
+        </form>
+
+        {% if attribute_count > 0 %}
+        <div class="text-white p-2">
+            <ul>
+                {% for item in attribute_tree %}
+                    {% include 'product/product_attribute_subtree_store.html' with item=item %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="text-gray-300 font-normal text-center my-2">This product has no attributes</div>
+        {% endif %}
+    </div>
+    
+</div>
+
+<script>
+    function showPreview(element) {
+        var preview = document.getElementById('imagePreview')
+
+        preview.src = element.src
+    }
+
+    function toggleForm(id) {
+        var form_id = 'form-' + id
+        var form = document.getElementById(form_id)
+        var btn = document.getElementById('toggle-' + id)
+        if (form.classList.contains('hidden')) {
+            form.classList.remove('hidden')
+            form.classList.add('flex')
+            form.querySelector('input[name="name"]').focus()
+            btn.innerHTML = "<div class=\"text-white items-center font-normal p-2 rounded-md bg-quarternary text-sm link-button\"><svg class=\"w-4 h-4 text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18 17.94 6M18 18 6.06 6\"/></svg></div>"
+        } else {
+            form.classList.add('hidden')
+            form.classList.remove('flex')
+            
+            btn.innerHTML = "<div class=\"text-white items-center font-normal p-2 rounded-md bg-quarternary text-sm link-button\"><svg class=\"w-4 h-4 text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5 12h14m-7 7V5\"/></svg></div>"
+        }
+    }
+</script>
+
+{% endblock %}

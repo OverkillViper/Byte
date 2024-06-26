@@ -1,0 +1,50 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYTE</title>
+    {% tailwind_css %}
+    <style>
+        * { 
+            @apply p-0;
+            @apply m-0;
+        }
+    </style>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        .courier-prime {
+            font-family: "Courier Prime", monospace;
+            font-weight: 500;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="flex flex-col max-w-screen h-screen">
+        <!-- Header -->
+        {% include 'frontend/includes/header.html' %}
+
+        <!-- Content -->
+        <main class="flex justify-center p-4 flex-grow m-0 max-w-screen">
+            <div class="w-full xl:w-5/6 2xl:3/4 justify-between">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </main>
+
+        <!-- Footer -->
+        {% include 'frontend/includes/footer.html' %}
+    </div>
+    
+    {% include 'frontend/includes/messages.html' %}
+    {% include 'customer/address_create_modal.html' %}
+</body>
+</html>

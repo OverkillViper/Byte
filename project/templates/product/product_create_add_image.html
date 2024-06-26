@@ -1,0 +1,131 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex flex-col">
+    <div class="flex justify-center items-center p-6 flex-grow w-2/3 mx-auto">
+        <!-- Stores -->
+        <div class="bg-primary border border-ternary rounded-lg overflow-hidden text-sm">
+            <div class="bg-secondary p-5 font-primary text-accent-200">
+                {% if edit %}Edit{% else %}Create{% endif %} Product
+            </div>
+            <hr class="border-1 border-ternary">
+
+            <ol class="items-center w-full flex justify-around p-4 font-primary select-none">
+                <li class="flex items-center text-accent-200 space-x-2.5">
+                    <span class="flex items-center justify-center w-8 h-8 border border-accent-200 rounded-full shrink-0">
+                        <svg class="w-6 h-6 text-accent-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                    <span>
+                        <h3 class="font-medium leading-tight">Product Details</h3>
+                    </span>
+                </li>
+                <span class="text-gray-400">|</span>
+                <li class="flex items-center text-accent-200 space-x-2.5">
+                    <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                        2
+                    </span>
+                    <span>
+                        <h3 class="font-medium leading-tight">Product Images</h3>
+                    </span>
+                </li>
+                <span class="text-gray-400">|</span>
+                <li class="flex items-center text-gray-500 space-x-2.5">
+                    <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                        3
+                    </span>
+                    <span>
+                        <h3 class="font-medium leading-tight">Complete</h3>
+                    </span>
+                </li>
+            </ol>
+
+            <hr class="border-1 border-ternary">
+            <div class="grid grid-cols-2 p-5 gap-x-5">
+                <div>
+                    <form class="" method="POST" action="/product/upload-image/{{ product_id }}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- Product Images -->
+                        <div class="text-white font-primary col-span-2">Product Images</div>
+                        <div class="flex my-2">
+                            <input type="hidden" name="edit" id="edit" value="{{ edit }}">
+                            <input multiple="true" type="file" class="font-normal text-white border-1 rounded-md border-ternary bg-quarternary w-full" name="images" id="images" max="5">
+                            <input type="hidden" name="product_id" value="{{ product_id }}">
+                            <button type="submit" class="ms-2 bg-ternary link-button font-primary px-4 py-2 uppercase rounded-md flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 3a1 1 0 0 1 .78.375l4 5a1 1 0 1 1-1.56 1.25L13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5A1 1 0 0 1 12 3ZM9 14v-1H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v1a3 3 0 1 1-6 0Zm8 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Upload</span>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="grid grid-cols-3 gap-3 mt-6">
+                        {% if galleries %}
+                            {% for gallery in galleries %}
+                                <div class="">
+                                    <img src="{{ gallery.image.url }}" class="border rounded-lg border-ternary aspect-square object-cover w-full cursor-pointer" onclick="showPreview(this)">
+                                    <div class="flex text-white font-normal items-center">
+                                        <a href="/product/increaseDisplayOrder/{{ gallery.id }}" class="{% if forloop.first %} hidden {% endif %}">
+                                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 16.881V7.119a1 1 0 0 0-1.636-.772l-5.927 4.881a1 1 0 0 0 0 1.544l5.927 4.88a1 1 0 0 0 1.636-.77Z"/>
+                                            </svg>
+                                        </a>
+                                        <div class="select-none">{{ gallery.display_order }}</div>
+                                        <a href="/product/decreaseDisplayOrder/{{ gallery.id }}" class="{% if forloop.last %} hidden {% endif %}">
+                                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16.881V7.119a1 1 0 0 1 1.636-.772l5.927 4.881a1 1 0 0 1 0 1.544l-5.927 4.88A1 1 0 0 1 8 16.882Z"/>
+                                            </svg>
+                                        </a>
+                                        <div class="flex-grow flex justify-end">
+                                            <a href="/product/delete-image/{{ gallery.id }}">
+                                                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                                                </svg>                                                  
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-sm text-gray-500 font-normal col-span-3 text-center">This product has no image</div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                
+                <div class="">
+                    <div class="text-white font-primary col-span-2">Preview</div>
+                    <div class="bg-quarternary rounded-lg flex justify-center p-5 mt-2 min-w-full max-w-96 mx-auto">
+                        <img src="{% static 'images/image_placeholder.png' %}" alt="" id="preview" class="w-full aspect-square object-cover">
+                    </div>
+                </div>
+
+            </div>            
+            <hr class="border-1 border-ternary">
+            <div class="bg-secondary p-5 font-primary flex justify-end text-black ">
+                <a href="/product/complete/{{ product_id }}" class="bg-accent-200 px-4 py-2 rounded-md link-button uppercase font-primary" style="color: #000;">{% if edit %}Update{% else %}Create{% endif %} Product</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    image.onchange = event => {
+        const [file] = image.files
+        if (file) {
+            preview.src = URL.createObjectURL(file)
+        }
+    }
+
+    function showPreview(element) {
+        preview.src = element.src
+    }
+
+</script>
+
+
+{% endblock %}

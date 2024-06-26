@@ -1,0 +1,104 @@
+<div class="fixed z-10 bg-secondary bg-opacity-90 top-0 w-full h-full hidden" id="createModal">
+    <div class="m-auto bg-secondary p-5 rounded-md shadow-lg w-1/3 border border-ternary">
+        <div class="flex items-center justify-between">
+            <div class="text-accent-200 font-primary text-lg">Add a new address</div>
+            <div class="p-2 rounded-full bg-ternary text-gray-400 hover:text-white transition" onclick="closeCreateModal()">
+                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                </svg>                  
+            </div>
+        </div>
+
+        <form action="/customer/add-address" class="mt-6" id="addressForm" method="POST">
+            {% csrf_token %}
+            <label for="title" class="font-primary text-white">Address title</label>
+            <input type="text" name="title" id="title" class="form-input">
+
+            <div class="grid grid-cols-2 gap-x-5">
+                <label for="street" class="font-primary text-white">Street</label>
+                <label for="city" class="font-primary text-white">City</label>
+                <input type="text" name="street" id="street" class="form-input">
+                <input type="text" name="city" id="city" class="form-input">
+                <label for="district" class="font-primary text-white">District</label>
+                <label for="country" class="font-primary text-white">Country</label>
+                <input type="text" name="district" id="district" class="form-input">
+                
+                
+                <!-- Country -->
+                <button id="create_country_select" data-dropdown-toggle="create_country_list" data-dropdown-placement="bottom" class="form-input flex items-center justify-between" type="button">
+                    <div id="create_country_label">Select a country</div>
+                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                    
+                <!-- Country List -->
+                <div id="create_country_list" class="z-10 hidden rounded-lg shadow-lg w-60 bg-quarternary">
+                    <div class="p-3">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                        </div>
+                        <input onkeyup="filterFunction()" type="text" id="country_filter" class="block font-normal w-full p-2 ps-10 text-sm text-white border border-ternary rounded-lg bg-secondary focus:border-gray-600 focus:ring-0" placeholder="Search" autocomplete="off">
+                    </div>
+                    </div>
+                    <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="create_country_select">
+                        {% for country in countries %}
+                            <li class="font-primary cursor-default py-1 px-2 rounded-sm hover:bg-ternary text-white select-none" data-parent="false" onclick="selectOption(this)">{{ country }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <input type="hidden" name="country" id="country">
+                
+                <button type="submit" class="mt-6 bg-accent-200 text-secondary font-primary uppercase px-4 py-2 rounded-md link-button col-start-2" style="color: #1e1e1e">
+                    Add address
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var countryInput = document.getElementById('country')
+    var selectInput  = document.getElementById('create_country_label')
+    var create_div   = document.getElementById("create_country_list");
+
+    var createModal  = document.getElementById('createModal')
+    var form         = document.getElementById('addressForm')
+
+    function filterFunction() {
+        var input, filter, ul, li, i;
+        input   = document.getElementById("country_filter");
+        filter  = input.value.toUpperCase();
+        
+        li      = create_div.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            txtValue = li[i].textContent || li[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+    function selectOption(element) {
+        countryInput.value = element.innerText
+        selectInput.innerText = element.innerText
+        create_div.classList.add('hidden')
+    }
+
+    function openCreateModal() {
+        createModal.classList.remove('hidden')
+        createModal.classList.add('flex')
+    }
+
+    function closeCreateModal() {
+        form.reset()
+        createModal.classList.remove('flex')
+        createModal.classList.add('hidden')
+    }
+
+</script>

@@ -1,0 +1,75 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="2xl:w-5/6 mx-auto flex justify-end text-white px-8 mt-4 font-primary items-center">
+    <div>Filter:</div>
+    <div id="filterDropdownBtn" data-dropdown-toggle="filters" class="ms-2 bg-quarternary rounded-md px-4 py-2 flex items-center cursor-default hover:bg-ternary transition capitalize">
+        {% if request.GET.filter is None %}
+        Show all
+        {% elif request.GET.filter == 'processing' %}
+            Pending
+        {% else %}
+        {{ request.GET.filter }}
+        {% endif %}
+        <svg class="w-5 h-5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/>
+        </svg>          
+    </div>
+    <div id="filters" class="hidden bg-quarternary w-32 text-gray-400 font-normal rounded-md border border-ternary shadow-lg">
+        <ul class="py-2">
+            <li class="px-4 py-1"><a href="/seller/orders" class="hover:text-white transition">Show all</a></li>
+            <li class="px-4 py-1"><a href="?filter=processing" class="hover:text-white transition">Pending</a></li>
+            <li class="px-4 py-1"><a href="?filter=accepted" class="hover:text-white transition">Accepted</a></li>
+            <li class="px-4 py-1"><a href="?filter=shipped" class="hover:text-white transition">Shipped</a></li>
+            <li class="px-4 py-1"><a href="?filter=delivered" class="hover:text-white transition">Delivered</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="2xl:w-5/6 mx-auto px-8">
+    {% if grouped_order_items %}
+        {% for grouped_order_item in grouped_order_items %}
+            <div class="text-white font-primary mb-4">Order <a class="text-accent-200 hover:underline" href="/seller/order/details/{{ grouped_order_item.order.id }}">#{{ grouped_order_item.order.id }}</a></div>
+            {% for order_item in grouped_order_item.order_items %}
+                <div class="ms-6 flex p-3 bg-quarternary rounded-md items-center mb-4 text-sm">
+                    <a href="/seller/store/product/{{ order_item.product.id }}" class="me-4">
+                        <img src="{{ order_item.product.first_gallery.image.url }}" alt="product_image" class="w-16 aspect-square rounded-md">
+                    </a>
+                    <a class="flex-grow" href="/seller/store/product/{{ order_item.product.id }}">
+                        <div class="text-white font-primary">{{ order_item.product.name }}</div>
+                        <div class="text-accent-200 font-primary">Quantity: {{ order_item.quantity }}</div>
+                        <div class="text-sm fonr-primary text-gray-400">Placed on {{ order_item.order.created_at }}</div>
+                    </a>
+                    <div id="order-item-{{ order_item.id }}" data-dropdown-toggle="dropdown-{{ order_item.id }}" class="flex items-center justify-center bg-quarternary border border-ternary px-4 py-2 text-accent-200 font-primary rounded-sm select-none uppercase hover:bg-ternary transition">
+                        {% if order_item.status == 'processing' %} Pending {% else %} {{ order_item.status }} {% endif %}
+                        <svg class="w-5 h-5 text-accent-200 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/>
+                        </svg>
+                    </div>
+                    <div id="dropdown-{{ order_item.id }}" class="z-10 hidden bg-secondary divide-y divide-gray-100 rounded-lg shadow w-36 border border-ternary">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="order-item-{{ order_item.id }}">
+                          <li>
+                            <a href="/seller/order/change-item-status/{{ order_item.id }}/processing" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Pending</a>
+                          </li>
+                          <li>
+                            <a href="/seller/order/change-item-status/{{ order_item.id }}/accepted" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Accepted</a>
+                          </li>
+                          <li>
+                            <a href="/seller/order/change-item-status/{{ order_item.id }}/shipped" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Shipped</a>
+                          </li>
+                          <li>
+                            <a href="/seller/order/change-item-status/{{ order_item.id }}/delivered" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Delivered</a>
+                          </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <div class="mx-auto col-span-5 text-gray-400 font-normal text-center">No orders found</div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

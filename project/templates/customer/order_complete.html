@@ -1,0 +1,21 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% load markdownify %}
+{% block content %}
+
+<div>
+    <div class="text-2xl font-primary text-white mb-4">Order complete</div>
+    <div class="text-center text-lg text-white font-normal">
+        Your order has been placed successfully!<br><br>You can track your order from the following link: 
+        <div class="font-primary text-accent-200">Order ID: {{ order_id }}</div>
+        
+        <div class="mt-6 p-0">
+            <a href="/customer/order/details/{{ order_id }}" class="bg-accent-200 link-button px-4 py-2 uppercase font-primary rounded-md" style="color: #000;">
+                Track my order
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

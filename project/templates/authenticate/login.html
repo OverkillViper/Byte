@@ -1,0 +1,118 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | BYTE</title>
+    {% tailwind_css %}
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-primary">
+    <div class="flex h-screen">
+        <div class="w-1/2 bg-secondary m-auto shadow-lg grid grid-cols-2">
+            <div class="p-6 w-full">
+                <a href="/" class="flex items-center">
+                    <img src="{% static 'images/logo_main.png' %}" alt="logo" class="w-4 h-4">
+                    <div class="font-primary text-white text-xl ps-5 tracking-wider whitespace-nowrap">
+                        BYTE
+                    </div>
+                </a>
+                
+                <div class="text-accent-200 font-primary text-lg mt-8 text-center">Sign In</div>
+            
+                <form action="/auth/login" method="POST" class="mt-4 font-primary ">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+                    <div class="text-grey-200 ms-2 select-none">Email</div>
+                    <input value="{% if form.email.value != None %}{{ form.email.value }}{% endif %}" type="text" name="email" id="email" class="form-input">
+            
+                    <div class="text-grey-200 ms-2 select-none mt-4">Password</div>
+                    <div class="flex items-center">
+                        <input type="password" name="password" id="password" class="form-input">
+                        <span class="material-symbols-outlined ms-3 text-grey-200 cursor-pointer" id="key">key</span>
+                    </div>
+            
+                    <div class="flex justify-end items-center">
+                        <a href="/auth/reset-password" class="text-grey-200 hover:underline hover:underline-offset-2">
+                            Forgot password?
+                        </a>
+                    </div>
+                    
+                    <div class="flex justify-center mt-10">
+                        <button type="submit" class="uppercase text-white bg-ternary px-4 py-2 rounded-md shadow-md border-1 border-quarternary link-button">
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="p-6 w-full bg-quarternary font-primary flex justify-center items-center">
+                <div>
+                    <div class="text-center">
+                        <div class="mb-4 text-grey-200">Don't have an account?</div>
+                        <a href="/auth/register/customer" class="uppercase text-white bg-ternary px-4 py-2 rounded-md shadow-md border-1 border-quarternary link-button">Register</a>
+                    </div>
+                    <div class="text-center mt-10">
+                        <div class="mb-4 text-grey-200">Become a Seller</div>
+                        <a href="/auth/register/seller" class="uppercase text-white bg-ternary px-4 py-2 rounded-md shadow-md border-1 border-quarternary link-button">Join</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fixed bottom-0 right-2 w-72">
+        <div class="fixed bottom-0 right-2 w-72">
+            {% if messages %}
+            {% for message in messages %}
+                <div id="error-toast-{{ forloop.counter0 }}" class="flex 2xl:right-4 items-center w-full max-w-xs p-2 mb-2 text-white bg-ternary rounded-lg shadow" role="alert">
+                    <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 bg-secondary rounded-lg">
+                        
+                        {% if message.tags == 'success' %}
+                        <svg class="w-6 h-6 text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
+                        </svg>                      
+                        {% elif message.tags == 'error' %}
+                        <svg class="w-6 h-6 text-red-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
+                        </svg>                      
+                        {% elif message.tags == 'info' %}
+                        <svg class="w-6 h-6 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd"/>
+                        </svg>
+                        {% endif %}
+                    </div>
+                    <div class="ms-3 text-sm font-normal">{{ message }}</div>
+                    <button type="button" class="transition ms-auto bg-secondary text-grey-200 hover:text-white rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-quarternary inline-flex items-center justify-center h-8 w-8 active:ring-0" data-dismiss-target="#error-toast-{{ forloop.counter0 }}" aria-label="Close">
+                        <span class="sr-only">Close</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>  
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Show/Hide Password -->
+    <script>
+        const key = document.querySelector("#key");
+        
+        const password = document.querySelector("#password");
+        
+        key.addEventListener("click", function() {
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            
+            this.innerText = this.innerText === "key" ? "key_off" : "key";
+        })
+
+    </script>
+
+</body>
+</html>

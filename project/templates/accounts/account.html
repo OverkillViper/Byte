@@ -1,0 +1,30 @@
+{% load static %}
+<div class="w-2/3 mx-auto flex flex-col items-center">
+    <div class="rounded-full mt-10 outline outline-2 outline-gray-400 w-24 overflow-hidden outline-offset-2">
+        <img src="{% static 'images/avatar.png' %}" alt="" class="bg-white">
+    </div>
+    <div class="text-white font-primary text-xl mt-6">
+        {{ account.get_full_name }}
+    </div>
+    <div class="text-gray-400 font-normal text-lg">
+        {{ account.email }}
+    </div>
+    <hr class="border-1 border-ternary w-full my-6">
+    <div class="my-3 flex text-white font-primary w-2/3 justify-between">
+        <div class="">First name</div>
+        <div class="font-normal">{{ account.first_name }}</div>
+    </div>
+    <div class="my-3 flex text-white font-primary w-2/3 justify-between">
+        <div class="">Last name</div>
+        <div class="font-normal">{{ account.last_name }}</div>
+    </div>
+    <div class="my-3 flex text-white font-primary w-2/3 justify-between">
+        <div class="">Phone</div>
+        <div class="font-normal">{{ account.phone }}</div>
+    </div>
+    <div class="my-3 flex text-white font-primary w-2/3 justify-between">
+        <div class="">Role</div>
+        <div class="font-normal capitalize">{{ account.role }}</div>
+    </div>
+    <hr class="border-1 border-ternary w-full my-6">
+</div>

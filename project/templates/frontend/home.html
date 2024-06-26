@@ -1,0 +1,75 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Banner -->
+<div class="w-full rounded-md bg-secondary p-6 py-10 select-none">
+    <div class="text-accent-300 text-6xl courier-prime text-center mx-auto">
+        # BYTE
+    </div>
+    <div class="font-primary text-xl text-center mx-auto text-white">
+        Tech Simplified, Byte by Byte
+    </div>
+</div>
+
+<!-- Trending -->
+<div class="flex justify-between mt-10">
+    <div class="text-md text-2xl font-primary select-none">
+        <span class="text-accent-200">#</span>
+        <span class="text-white">Most popular</span>
+    </div>
+    <a href="/products?filter=popular" class="flex items-center link-button px-4 py-2">
+        <span class="uppercase font-normal me-3">See more</span>
+        <svg class="w-5 h-5 text-accent-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
+        </svg>
+    </a>
+</div>
+
+<div class="grid grid-cols-6 gap-4 mt-4">
+    {% for product in popular_products %}
+        {% include 'product/product_card.html' %}
+    {% endfor %}
+</div>
+
+<!-- Popular Shops -->
+<div class="flex justify-between mt-10">
+    <div class="text-md text-2xl font-primary select-none">
+        <span class="text-accent-200">#</span>
+        <span class="text-white">Popular Seller</span>
+    </div>
+    <a href="/stores" class="flex items-center link-button px-4 py-2">
+        <span class="uppercase font-normal me-3">See more</span>
+        <svg class="w-5 h-5 text-accent-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
+        </svg>
+    </a>
+</div>
+
+<div class="grid grid-cols-6 gap-4 mt-4">
+    {% for store in top_stores %}
+        {% include 'seller/seller_card.html' %}  
+    {% endfor %}
+</div>
+
+<!-- Just arrived -->
+<div class="flex justify-between mt-10">
+    <div class="text-md text-2xl font-primary select-none">
+        <span class="text-accent-200">#</span>
+        <span class="text-white">Just arrived</span>
+    </div>
+    <a href="/products?filter=newest" class="flex items-center link-button px-4 py-2">
+        <span class="uppercase font-normal me-3">See more</span>
+        <svg class="w-5 h-5 text-accent-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
+        </svg>
+    </a>
+</div>
+
+<div class="grid grid-cols-6 gap-4 mt-4">
+    {% for product in new_products %}
+        {% include 'product/product_card.html' %}
+    {% endfor %}
+</div>
+
+{% endblock %}

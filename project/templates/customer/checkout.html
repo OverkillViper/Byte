@@ -1,0 +1,131 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% load markdownify %}
+{% block content %}
+
+<div>
+    <div class="text-2xl font-primary text-white mb-4">Checkout</div>
+        <div class="flex gap-x-5">
+            <div class="basis-2/3">
+                {% for item in carts %}
+                <div class="flex bg-quarternary p-3 rounded-md mb-2">
+                    <img src="{{ item.product.first_gallery.image.url }}" alt="" class="rounded-md w-12 aspect-square">
+                    <div class="flex-grow ms-4">
+                        <div class="text-white font-primary text-md">{{ item.product.name }}</div>
+                        <div class="text-gray-400 font-normal">
+                            <div><span class="font-primary">Price: </span>৳ {{item.product.discounted_price}} × {{ item.quantity }} = ৳ {% widthratio item.product.discounted_price 1 item.quantity %}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <a href="/customer/cart" class="flex items-center font-primary text-accent-100 hover:text-accent-300 transition mt-6">
+                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14 8-4 4 4 4"/>
+                      </svg>
+                    <span>Go back to Cart</span>                      
+                </a>
+            </div>
+            <form class="basis-1/3 bg-secondary rounded-lg" method="POST" action="/customer/place-order">
+                {% csrf_token %}
+                <div class="p-5">
+                    <div class="flex justify-between text-white">
+                        <div class="font-primary">Total items</div>
+                        <div class="font-normal">0{{ total_item }}</div>
+                    </div>
+                    <div class="flex justify-between text-white">
+                        <div class="font-primary">Total amount</div>
+                        <div class="font-normal">৳ {{ total_amount|floatformat:0 }}</div>
+                    </div>
+                </div>
+
+                <hr class="border-1 border-ternary">
+
+                <div class="p-5">
+                    <div class="font-primary text-white">Delivery address</div>
+                    <!-- Add new address -->
+                    <div class="bg-ternary rounded-md shadow px-4 py-2 font-primary justify-center flex items-center text-white cursor-pointer link-button mt-2" onclick="openCreateModal()">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                        </svg>
+                        <span class="ms-2 uppercase text-sm">
+                            Add new address
+                        </span>
+                    </div>
+    
+                    <!-- Select Address -->
+                    <div class="form-input flex justify-between items-center select-none cursor-default" data-dropdown-toggle="address_list" id="address_dropdown">
+                        <span id="address_label">Select address</span>
+                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/>
+                        </svg>                      
+                    </div>
+                    
+                    <div aria-labelledby="dropdownDefaultButton" id="address_list" class="z-10 shadow-lg rounded-md p-2 bg-quarternary w-1/5 2xl:w-1/4 hidden">
+                        <ul>
+                            {% if addressess %}
+                                {% for address in addressess %}
+                                <li class="text-gray-400 font-normal px-2 py-1 cursor-default hover:text-white transition" onclick="selectItem(this, '{{ address.id }}')">
+                                    <div class="font-primary">{{ address }}</div>
+                                    <div>{{ address.street }}</div>
+                                </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="text-gray-400 font-normal px-2 py-1 cursor-default">No address found</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <input type="hidden" name="address" id="address">
+                </div>
+
+                <hr class="border-1 border-ternary">
+
+                <div class="p-5">
+                    <div class="font-primary text-white">Payment</div>
+                    <div class="text-center font-normal text-gray-400">
+                        Please select payment method
+                    </div>
+                    <div class="grid grid-cols-2 rounded-lg overflow-hidden mt-2 bg-quarternary text-white select-none text-sm">
+                        <label for="cashless" class="font-primary text-black bg-accent-200 p-2 text-center payment" onclick="selectPayment(this)">Cashless</label>
+                        <label for="cod" class="font-primary p-2 text-center payment" onclick="selectPayment(this)">Cash on Delivery</label>
+                        <input type="radio" name="payment" id="cashless" value="cashless" class="hidden" checked>
+                        <input type="radio" name="payment" id="cod" value="cod" class="hidden">
+                    </div>
+                </div>
+                
+                <hr class="border-1 border-ternary">
+                <div class="text-center p-5">
+                    <button type="submit" class="bg-accent-200 text-black font-primary uppercase px-4 py-2 link-button text-sm rounded-md" style="color: #1e1e1e;">Place Order</button>
+                </div>
+            </form>
+        </div>
+</div>
+
+<script>
+
+    var address_list  = document.getElementById('address_list')
+    var address_input = document.getElementById('address')
+    var label         = document.getElementById('address_label')
+
+    function selectItem(element, value) {
+        address_list.classList.add('hidden')
+
+        address_input.value = value
+        label.innerText = element.innerText
+    }
+
+    function selectPayment(element) {
+        var payments = document.getElementsByClassName('payment')
+
+        for(let i=0; i < payments.length; i++) {
+            payments[i].classList.remove('text-black')
+            payments[i].classList.remove('bg-accent-200')
+        }
+
+        element.classList.add('text-black')
+        element.classList.add('bg-accent-200')
+    }
+
+</script>
+
+{% endblock %}

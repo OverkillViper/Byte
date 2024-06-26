@@ -1,0 +1,200 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex justify-center items-center p-6 flex-grow w-4/5 2xl:w-2/3 mx-auto">
+    <!-- Stores -->
+    <form action="/product/edit-product/{{ product.id }}" method="POST" class="bg-primary border border-ternary rounded-lg overflow-hidden text-sm">
+        {% csrf_token %}
+        <div class="bg-secondary p-5 font-primary text-accent-200">
+            Edit Product
+        </div>
+        <hr class="border-1 border-ternary">
+
+        <ol class="items-center w-full flex justify-around p-4 font-primary select-none">
+            <li class="flex items-center text-accent-200 space-x-2.5">
+                <span class="flex items-center justify-center w-8 h-8 border border-accent-200 rounded-full shrink-0">
+                    1
+                </span>
+                <span>
+                    <h3 class="font-medium leading-tight">Product Details</h3>
+                </span>
+            </li>
+            <span class="text-gray-400">|</span>
+            <li class="flex items-center text-gray-500 space-x-2.5">
+                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                    2
+                </span>
+                <span>
+                    <h3 class="font-medium leading-tight">Product Images</h3>
+                </span>
+            </li>
+            <span class="text-gray-400">|</span>
+            <li class="flex items-center text-gray-500 space-x-2.5">
+                <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                    3
+                </span>
+                <span>
+                    <h3 class="font-medium leading-tight">Complete</h3>
+                </span>
+            </li>
+        </ol>
+
+        <hr class="border-1 border-ternary">
+        <div class="grid grid-cols-2 p-5">
+            <div>
+                <div class="grid grid-cols-2 gap-x-5">
+                    <!-- Product name -->
+                    <div class="text-white font-primary col-span-2">Product name</div>
+                    <input type="text" name="name" id="name" class="form-input col-span-2" value="{{ product.name }}">
+
+                    <input type="hidden" name="reference" id="reference" value="{{ request.GET.ref }}" class="col-span-2">
+                </div>
+                <div class="grid grid-cols-2 gap-x-5">
+                    <div class="text-white font-primary">Brand</div>
+                    <div class="text-white font-primary">Model</div>
+                    <!-- Brand -->
+                    <input type="text" name="brand" id="brand" class="form-input" value="{{ product.brand }}">
+                    <!-- Model -->
+                    <input type="text" name="model" id="model" class="form-input" value="{{ product.model }}">
+                </div>
+                <div class="grid grid-cols-2 gap-x-5">
+                    <div class="text-white font-primary">Category</div>
+                    <div class="text-white font-primary">Price</div>
+
+                    <!-- Category -->
+                    <button id="category_select" data-dropdown-toggle="category_list" data-dropdown-placement="bottom" class="form-input flex items-center justify-between" type="button">
+                        <div id="category_label">{{ product_category.category.name }}</div>
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                        
+                    <!-- Category List -->
+                    <div id="category_list" class="z-10 hidden rounded-lg shadow-lg w-60 bg-quarternary">
+                        <div class="p-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
+                            <input onkeyup="filterFunction()" type="text" id="category_filter" class="block font-normal w-full p-2 ps-10 text-sm text-white border border-ternary rounded-lg bg-secondary focus:border-gray-600 focus:ring-0" placeholder="Search user">
+                        </div>
+                        </div>
+                        <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="category_select">
+                            {% for parent_id, data in category_dict.items %}
+                                {% if data.children %}
+                                    <div class="text-white font-primary py-1 px-2 cursor-default select-none" data-parent="true">{{ data.category.name }}</div>
+                                    {% for child in data.children %}
+                                        <li class="font-normal text-white ms-2 py-1 px-2 cursor-default rounded-sm hover:bg-ternary select-none" data-parent="false" onclick="selectOption(this)">{{ child.name }}</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="font-primary cursor-default py-1 px-2 rounded-sm hover:bg-ternary text-white select-none" data-parent="false" onclick="selectOption(this)">{{ data.category.name }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <input type="hidden" name="category" id="category" value="{{ product_category.category.name }}">
+
+                    <!-- Price -->
+                    <input type="text" name="price" id="price" class="form-input" value="{{ product.price }}">
+                </div>
+                <div class="grid grid-cols-2 gap-x-5">           
+                    <!-- Discount -->
+                    <div class="text-white font-primary flex items-center my-2">
+                        <input type="checkbox" name="apply_discount" id="apply_discount" class="bg-ternary rounded-sm border-none focus:ring-0 focus:outline-none focus:border-none" onclick="toggleDiscount(this)" {% if product.discount > 0 %}checked{% endif %}>
+                        <label class="ms-2 select-none" for="apply_discount">Apply discount</label>
+                    </div>
+                    <div>
+                        <div class="text-white font-primary discount hidden">Discount (%)</div>
+                        <input type="text" name="discount" id="discount" class="form-input discount {% if not product.discount > 0 %} hidden {% endif %}" checked="true" value="{{ product.discount }}">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-x-5">
+                    <!-- Warrenty -->
+                    <div>
+                        <div class="text-white font-primary">Warranty (years)</div>
+                        <input type="text" name="warranty" id="warranty" class="form-input" value="{{ product.warranty }}">
+                    </div>
+                    <!-- In-stock and Publish Immediately -->
+                    <div class="flex flex-col justify-center pt-2">
+                        <div class="flex items-center my-1">
+                            <input type="checkbox" name="in_stock" id="in_stock" class="rounded-sm bg-ternary ring-0 border-none focus:ring-0" {% if product.in_stock %} checked {% endif %}>
+                            <label class="text-white text-sm font-primary ms-2 select-none" for="in_stock">In Stock</label>
+                        </div>
+                        <div class="flex items-center my-1">
+                            <input type="checkbox" name="published" id="published" class="rounded-sm bg-ternary ring-0 border-none focus:ring-0" {% if product.published %} checked {% endif %}>
+                            <label class="text-white text-sm font-primary ms-2 select-none" for="published">Publish Immediately</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 py-1">
+                <div class="text-white font-primary mb-5">Product Description</div>
+                <textarea id="description" name="description" class="font-normal">{{ product.description }}</textarea>
+            </div>
+
+        </div>            
+        <hr class="border-1 border-ternary">
+        <div class="bg-secondary p-5 font-primary flex justify-end text-black ">
+            <button type="submit" class="bg-accent-200 px-4 py-2 rounded-md link-button uppercase font-primary" style="color: #000000;">Save product</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    var categoryInput = document.getElementById('category')
+    var selectInput   = document.getElementById('category_label')
+    var div           = document.getElementById("category_list");
+
+    function filterFunction() {
+        var input, filter, ul, li, i;
+        input   = document.getElementById("category_filter");
+        filter  = input.value.toUpperCase();
+        
+        li      = div.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            txtValue = li[i].textContent || li[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+    function selectOption(element) {
+        categoryInput.value = element.innerText
+        selectInput.innerText = element.innerText
+        div.classList.add('hidden')
+    }
+
+    function toggleDiscount(element) {
+        var fields = document.getElementsByClassName('discount')
+        var discount = document.getElementById('discount')
+
+        if (element.checked == true) {
+            for(let i = 0; i < fields.length; i++) {
+                fields[i].classList.remove('hidden')
+            }
+        } else {
+            discount.value = 0
+            for(let i = 0; i < fields.length; i++) {
+                fields[i].classList.add('hidden')
+            }
+        }
+    }
+
+    const easyMDE = new EasyMDE({
+        element: document.getElementById('description'),
+        status: false,
+        hideIcons: ["guide", "fullscreen", "side-by-side"],
+    });
+
+</script>
+
+
+{% endblock %}

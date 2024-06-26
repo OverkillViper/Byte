@@ -1,0 +1,99 @@
+{% extends 'moderator/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="m-7">
+    <div class="flex justify-between items-center">
+        <form action="/moderator/add-category" method="POST" class="mt-2 flex items-center space-x-2">
+            {% csrf_token %}
+            <input type="hidden" name="parent_category" id="parent_category" value="">
+            <label for="name" class="font-primary text-white text-sm">Add category:</label>
+            <input autofocus type="text" name="name" id="name" class="px-2 py-1 text-sm text-white bg-quarternary rounded-md border font-normal border-ternary focus:ring-0 focus:border-gray-400">
+            <button class="text-white items-center font-normal p-2 rounded-md bg-quarternary text-sm link-button" type="submit">
+                <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                </svg>
+            </button>
+        </form>
+        <div class="text-white font-primary flex items-center cursor-default select-none" onclick="expandAll()" id="expand">
+            <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/>
+            </svg>
+            Expand all
+        </div>
+        <div class="text-white font-primary hidden items-center cursor-default select-none" onclick="collapseAll()" id="collapse">
+            <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9h4m0 0V5m0 4L4 4m15 5h-4m0 0V5m0 4 5-5M5 15h4m0 0v4m0-4-5 5m15-5h-4m0 0v4m0-4 5 5"/>
+            </svg>              
+            Collapse all
+        </div>
+    </div>
+    
+    {% if categories %}
+        <div class="text-white p-2">
+            <ul data-accordion="collapse">
+                {% for item in category_tree %}
+                    {% include 'moderator/category_tree.html' with item=item %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+    <div class="text-center font-normal text-gray-400 mt-4">
+        No category found. Please add a category
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function toggleForm(id) {
+        var form_id = 'form-' + id
+        var form = document.getElementById(form_id)
+        var btn = document.getElementById('toggle-' + id)
+        if (form.classList.contains('hidden')) {
+            form.classList.remove('hidden')
+            form.classList.add('flex')
+            form.querySelector('input[name="name"]').focus()
+            btn.innerHTML = "<div class=\"text-white items-center font-normal p-2 rounded-md bg-quarternary text-sm link-button\"><svg class=\"w-4 h-4 text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18 17.94 6M18 18 6.06 6\"/></svg></div>"
+        } else {
+            form.classList.add('hidden')
+            form.classList.remove('flex')
+            
+            btn.innerHTML = "<div class=\"text-white items-center font-normal p-2 rounded-md bg-quarternary text-sm link-button\"><svg class=\"w-4 h-4 text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5 12h14m-7 7V5\"/></svg></div>"
+        }
+    }
+
+    var expand = document.getElementById('expand')
+    var collapse = document.getElementById('collapse')
+
+    function toggleAccordion(element) {
+        var child = document.getElementsByName(element.id)
+        console.log(child)
+        child[0].classList.toggle('hidden')
+    }
+
+    function expandAll() {
+        var children = document.querySelectorAll("[data-child='true']")
+
+        children.forEach(element => {
+            element.classList.remove('hidden')
+        });
+
+        expand.classList.add('hidden')
+        collapse.classList.remove('hidden')
+        collapse.classList.add('flex')
+    }
+
+    function collapseAll() {
+        var children = document.querySelectorAll("[data-child='true']")
+
+        children.forEach(element => {
+            element.classList.add('hidden')
+        });
+
+        expand.classList.remove('hidden')
+        expand.classList.add('flex')
+        collapse.classList.add('hidden')
+    }
+</script>
+
+{% endblock %}

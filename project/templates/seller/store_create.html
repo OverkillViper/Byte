@@ -1,0 +1,101 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex flex-col">
+    <div class="flex justify-center items-center p-6 flex-grow">
+        <!-- Stores -->
+        <form action="/seller/create-store" method="POST" class="bg-primary border border-ternary rounded-lg overflow-hidden text-sm w-1/2">
+            {% csrf_token %}
+            <div class="bg-secondary p-5 font-primary text-accent-200">
+                Add Store
+            </div>
+            <hr class="border-1 border-ternary">
+            <div class="p-5">
+                <div class="text-white font-primary">Store Name</div>
+                <input type="text" name="name" id="name" class="form-input">
+            </div>
+            <input type="hidden" name="reference" id="reference" value="{{ request.GET.ref }}">
+            <hr class="border-1 border-ternary">
+            <div class="p-5">
+                <div class="text-white font-primary">Store Address</div>
+
+                <div class="grid grid-cols-2 gap-x-5">
+                    <div class="text-white font-primary mt-4">Street</div>
+                    <div class="text-white font-primary mt-4">City</div>
+                    <input type="text" name="street" id="street" class="form-input">
+                    <input type="text" name="city" id="city" class="form-input">
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-5">
+                    <div class="text-white font-primary mt-4">District</div>
+                    <div class="text-white font-primary mt-4">Country</div>
+                    <input type="text" name="district" id="district" class="form-input">
+                    
+                    <!-- Country -->
+                    <button id="country_select" data-dropdown-toggle="country_list" data-dropdown-placement="bottom" class="form-input flex items-center justify-between" type="button">
+                        <div id="country_label">Select a country</div>
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                        
+                    <!-- Country List -->
+                    <div id="country_list" class="z-10 hidden rounded-lg shadow-lg w-60 bg-quarternary">
+                        <div class="p-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
+                            <input onkeyup="filterFunction()" autocomplete="off" type="text" id="country_filter" class="block font-normal w-full p-2 ps-10 text-sm text-white border border-ternary rounded-lg bg-secondary focus:border-gray-600 focus:ring-0" placeholder="Search country">
+                        </div>
+                        </div>
+                        <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="country_select">
+                            {% for country in countries %}
+                                <li class="font-primary cursor-default py-1 px-2 rounded-sm hover:bg-ternary text-white select-none" data-parent="false" onclick="selectOption(this)">{{ country }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <input type="hidden" name="country" id="country">
+
+                </div>
+            </div>
+            <hr class="border-1 border-ternary">
+            <div class="bg-secondary p-5 font-primary flex justify-end text-black ">
+                <button type="submit" class="bg-accent-200 px-4 py-2 rounded-md link-button uppercase font-primary" style="color: #000;">Add store</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var countryInput  = document.getElementById('country')
+    var selectInput   = document.getElementById('country_label')
+    var div           = document.getElementById("country_list");
+
+    function filterFunction() {
+        var input, filter, ul, li, i;
+        input   = document.getElementById("country_filter");
+        filter  = input.value.toUpperCase();
+        
+        li      = div.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            txtValue = li[i].textContent || li[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+    function selectOption(element) {
+        countryInput.value = element.innerText
+        selectInput.innerText = element.innerText
+        div.classList.add('hidden')
+    }
+</script>
+
+{% endblock %}

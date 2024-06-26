@@ -1,0 +1,49 @@
+{% load static %}
+<div class="w-2/3 mx-auto h-full flex flex-col">
+    <div class="flex justify-between items-center">
+        <div class="text-accent-200 text-2xl font-primary">
+            {% for participant in conversation.participants.all %}{% if participant != request.user %}{{ participant.get_full_name }}{% endif %}{% endfor %}
+        </div>
+        <a href="/account/delete-conversation/{{ conversation.id }}" class="text-gray-400 hover:text-white font-normal transition">
+            Delete conversation
+        </a>
+    </div>
+    
+    <hr class="border border-quarternary my-2">
+    <div class="flex flex-col font-normal flex-grow py-4 justify-end">
+        {% if msgs %}
+            {% for message in msgs %}
+                <div class="flex w-2/3 {% if message.sender == request.user %} self-end {% endif %}">
+                    {% if message.sender != request.user %}
+                    <div>
+                        <div class="rounded-full outline outline-1 outline-gray-400 w-6 overflow-hidden outline-offset-2">
+                            <img src="{% static 'images/avatar.png' %}" alt="" class="bg-white">
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="ms-4 flex-grow font-normal flex flex-col {% if message.sender == request.user %} items-end {% else %} items-start {% endif %}">
+                        <span class="bg-secondary p-2 rounded-md text-white mb-2 cursor-default" data-tooltip-target="tooltip-{{ message.id }}" data-tooltip-placement="{% if message.sender == request.user %}left{% else %}right{% endif %}">
+                            {{ message.content }}
+                        </span>
+                        <div id="tooltip-{{ message.id }}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-normal text-gray-400 bg-quarternary rounded-lg shadow-sm opacity-0 tooltip">
+                            Sent on {{ message.created_at }}
+                            <div class="tooltip-arrow text-red-400" data-popper-arrow></div>
+                        </div>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-gray-400">No messages yet</div>
+        {% endif %}
+    </div>
+    <form action="/account/conversation/{{ conversation.id }}" method="POST" class="flex">
+        {% csrf_token %}
+        <input type="text" autocomplete="off" placeholder="Aa" name="message" id="message" class="flex-grow bg-secondary rounded-md px-4 py-1 hover:bg-quarternary transition border-quarternary ring-0 focus:ring-0 focus:border-ternary text-white font-normal">
+        <button>
+            <span class="material-symbols-outlined text-accent-200 px-4 py-3">
+                send
+            </span>
+        </button>
+    </form>
+</div>

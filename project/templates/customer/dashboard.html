@@ -1,0 +1,136 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="m-8">
+    <div class="text-white font-normal">Welcome</div>
+    <div class="text-accent-200 font-primary text-2xl">{{ request.user.get_full_name }}</div>
+</div>
+<div class="mx-8">
+    <hr class="border-1 border-quarternary">
+</div>
+
+<div>
+    <div class="grid grid-cols-6 gap-4 m-8 select-none">
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Standing orders</div>
+            <div class="text-accent-200 font-primary text-lg">{{ standing_orders }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Completed orders</div>
+            <div class="text-accent-200 font-primary text-lg">{{ completed_orders }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Products purchased</div>
+            <div class="text-accent-200 font-primary text-lg">{{ item_bought }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Money Spent</div>
+            <div class="text-accent-200 font-primary text-lg">৳ {{ money_spent }} </div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Addresses</div>
+            <div class="text-accent-200 font-primary text-lg">{{ total_address }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Wishlists</div>
+            <div class="text-accent-200 font-primary text-lg">{{ wishlist }}</div>
+        </div>
+
+        <div class="col-span-2 bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Payment methods</div>
+            <canvas id="payment_methods"></canvas>
+        </div>
+        <div class="col-span-4 bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Products delivered</div>
+            <canvas id="order-timeline"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script type="text/javascript">
+
+    const payment_method_data = {
+        labels: [
+            'Cashless',
+            'Cash on Delivery'
+        ],
+        datasets: [{
+            data: [{{ cash_payment|safe }}, {{ cashless_payment|safe }}],
+            backgroundColor: [
+                '#72b3f4',
+                'rgb(172, 148, 250)',
+            ],
+            hoverOffset: 4,
+            borderColor: [ 
+                '#131517', 
+                '#131517',
+            ],
+            hoverBorderColor: [
+                '#3f4148', 
+                '#3f4148', 
+            ],
+        }]
+    };
+
+    const payment_method_config = {
+        type: 'doughnut',
+        data: payment_method_data,
+        
+        options: {
+            responsive: true,
+            cutout:'80%',
+            tooltip: {
+                enabled: false
+            }
+        }
+        
+    };
+
+    const payment_method_ctx = document.getElementById("payment_methods").getContext('2d');
+    const payment_method_Chart = new Chart(payment_method_ctx, payment_method_config);
+
+    const order_labels = [];
+    const order_data = [];
+
+    {% for item in sell_by_day %}
+        order_labels.push("{{ item.day.day }}");
+        order_data.push({{ item.count }});
+    {% endfor %}
+
+    const order_ctx = document.getElementById('order-timeline').getContext('2d');
+    const order_Chart = new Chart(order_ctx, {
+        type: 'bar',
+        data: {
+            labels: order_labels,
+            datasets: [{
+                label: 'Products',
+                data: order_data,
+                backgroundColor: '#1a1c20',
+                borderColor: '#72b3f4',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    },
+                },
+            },
+            maintainAspectRatio: false,
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex flex-col">
+    <div class="px-8 py-4 flex items-center">
+        <div class="flex-grow text-white text-lg font-primary">Product</div>
+        <div class="text-gray-300 hover:text-white transition cursor-pointer ms-4">
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z"/>
+            </svg>
+        </div>
+        <div class="text-gray-300 hover:text-white transition cursor-pointer ms-4">
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path    d="M2.038 5.61A2.01 2.01 0 0 0 2 6v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-.12-.01-.238-.03-.352l-.866.65-7.89 6.032a2 2 0 0 1-2.429 0L2.884 6.288l-.846-.677Z"/>
+                <path d="M20.677 4.117A1.996 1.996 0 0 0 20 4H4c-.225 0-.44.037-.642.105l.758.607L12 10.742 19.9 4.7l.777-.583Z"/>
+              </svg>
+        </div>
+    </div>
+    
+    <hr class="border-1 border-ternary">
+    
+    <div class="flex justify-center items-center p-6 flex-grow w-2/3 mx-auto">
+        <!-- Stores -->
+        <div class="bg-primary border border-ternary rounded-lg overflow-hidden text-sm">
+            <div class="bg-secondary p-5 font-primary text-accent-200">
+                Product
+            </div>
+            <hr class="border-1 border-ternary">
+
+            <ol class="items-center w-full flex justify-around p-4 font-primary select-none">
+                <li class="flex items-center text-accent-200 space-x-2.5">
+                    <span class="flex items-center justify-center w-8 h-8 border border-accent-200 rounded-full shrink-0">
+                        <svg class="w-6 h-6 text-accent-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                    <span>
+                        <h3 class="font-medium leading-tight">Product Details</h3>
+                    </span>
+                </li>
+                <span class="text-gray-400">|</span>
+                <li class="flex items-center text-accent-200 space-x-2.5">
+                    <span class="flex items-center justify-center w-8 h-8 border border-accent-200 rounded-full shrink-0">
+                        <svg class="w-6 h-6 text-accent-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                    <span>
+                        <h3 class="font-medium leading-tight">Product Images</h3>
+                    </span>
+                </li>
+                <span class="text-gray-400">|</span>
+                <li class="flex items-center text-accent-200 space-x-2.5">
+                    <span class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0">
+                        3
+                    </span>
+                    <span>
+                        <h3 class="font-medium leading-tight">Complete</h3>
+                    </span>
+                </li>
+            </ol>
+
+            <hr class="border-1 border-ternary">
+            <div class="grid grid-cols-2 p-5 gap-x-5">
+                <div>
+                    <img src="{{ galleries.0.image.url }}" class="rounded-lg">
+                    <div class="flex mt-3 gap-x-3">
+                        {% for gallery in galleries %}
+                            {% if not forloop.first %}
+                                <img src="{{ gallery.image.url }}" class="rounded-md w-16 2xl:w-28">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="">
+                    <p class="font-primary text-white text-xl">{{ product.name }}</p>
+                    <div class="flex text-lg text-white font-normal mt-6">
+                        <span class="font-primary w-24">Price:</span> {{ product.price }}
+                    </div>
+                    <div class="flex text-lg text-white font-normal">
+                        <span class="font-primary w-24">Discount:</span> {{ product.discount }}%
+                    </div>
+                    <div class="flex text-lg text-white font-normal">
+                        <span class="font-primary w-24">Brand:</span> {{ product.brand }}
+                    </div>
+                    <div class="flex text-lg text-white font-normal">
+                        <span class="font-primary w-24">Model:</span> {{ product.model }}
+                    </div>
+                    <div class="flex text-lg text-white font-normal">
+                        <span class="font-primary w-24">Warranty:</span> {{ product.warranty }} year(s)
+                    </div>
+                    <div class="flex text-lg text-white font-normal">
+                        <span class="font-primary w-24">Store:</span> {{ product.store.name }}
+                    </div>
+                </div>
+
+            </div>            
+            <hr class="border-1 border-ternary">
+            <div class="bg-secondary p-5 font-primary flex justify-end text-black ">
+                <a href="/seller/store/product/{{ product.id }}" class="bg-accent-200 px-4 py-2 rounded-md link-button uppercase font-primary" style="color: #000;">See product details</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    image.onchange = event => {
+        const [file] = image.files
+        if (file) {
+            preview.src = URL.createObjectURL(file)
+        }
+    }
+
+    function showPreview(element) {
+        preview.src = element.src
+    }
+
+</script>
+
+
+{% endblock %}

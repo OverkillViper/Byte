@@ -1,0 +1,14 @@
+{% extends 'authenticate/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h-full flex justify-center items-center p-10 py-20">
+    <div class="text-accent-200 text-xl font-primary">Invalid Activation Link</div>
+</div>
+<div class="h-full flex justify-center items-center p-10 py-20">
+    <div class="text-white font-normal text-md">
+        Sorry! The activation link used to activate the account is either invalid or expired
+    </div>
+</div>
+
+{% endblock %}

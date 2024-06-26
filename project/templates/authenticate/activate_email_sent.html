@@ -1,0 +1,13 @@
+{% extends 'authenticate/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="h-full flex justify-center items-center p-10 py-20">
+    <div class="text-accent-200 text-xl font-primary">Account Activation Email Sent</div>
+</div>
+<div class="h-full flex justify-center items-center p-10 py-20">
+    <div class="text-white font-normal text-md">Dear Mr. <span class="text-accent-200">{{ last_name }}</span>, an account activation email
+        has been sent to this email address: <br><br><span class="text-accent-200">{{ email }}</span><br><br>Please click on the Email Activation Link. If email not found, check your spam folder. Note that the link will be valid for 4 hours</div>
+</div>
+
+{% endblock %}

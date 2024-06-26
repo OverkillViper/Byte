@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Crique Grotesk Black';
+        src: url('CriqueGrotesk-Black.woff2') format('woff2'),
+            url('CriqueGrotesk-Black.woff') format('woff');
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+    }
+    
+    @font-face {
+        font-family: 'Crique Grotesk Bold';
+        src: url('CriqueGrotesk-Bold.woff2') format('woff2'),
+            url('CriqueGrotesk-Bold.woff') format('woff');
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+    }
+    
+    @font-face {
+        font-family: 'Crique Grotesk';
+        src: url('CriqueGrotesk.woff2') format('woff2'),
+            url('CriqueGrotesk.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+    
+    @font-face {
+        font-family: 'Crique Grotesk Medium';
+        src: url('CriqueGrotesk-Medium.woff2') format('woff2'),
+            url('CriqueGrotesk-Medium.woff') format('woff');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+    }
+}
+
+.link-button {
+    color: #FFF;
+    transition: all 0.5s;
+    position: relative;
+    @apply select-none;
+}
+  
+.link-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(77, 85, 92, 0.1);
+    transition: all 0.3s;
+    border-radius: 5px;
+}
+  
+.link-button:hover::before {
+    opacity: 0 ;
+    transform: scale(0.5,0.5);
+}
+  
+.link-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: all 0.3s;
+    border: 1px solid rgba(255,255,255,0.5);
+    transform: scale(1.2,1.2);
+    border-radius: 5px;
+}
+  
+.link-button:hover::after {
+    opacity: 1;
+    transform: scale(1,1);
+}
+
+.form-input {
+    @apply w-full;
+    @apply transition;
+    @apply text-white;
+    @apply font-normal;
+    @apply my-2;
+    @apply px-2;
+    @apply py-1;
+    @apply 2xl:py-2;
+    @apply rounded-sm;
+    @apply bg-quarternary;
+    @apply border-0;
+    @apply border-b-2;
+    @apply border-b-ternary;
+    @apply focus:border-b-2;
+    @apply focus:border-b-grey-200;
+    @apply focus:ring-0;
+}
+
+.sidebar-sections {
+    @apply px-6;
+    @apply 2xl:px-7;
+    @apply py-4;
+}
+
+.options {
+    display: none;
+}
+
+.attribute:hover .options {
+    display: flex;
+}
+
+strong {
+    font-weight: normal;
+    @apply font-primary
+}

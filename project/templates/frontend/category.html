@@ -1,0 +1,22 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="text-md text-2xl font-primary select-none">
+    <span class="text-accent-200">#</span>
+    <span class="text-white">
+        {{ category.name }}s
+    </span>
+</div>
+
+<div class="grid grid-cols-6 gap-4 mt-6">
+    {% if products_categories %}
+        {% for product_category in products_categories %}
+            {% include 'product/product_card.html' with product=product_category.product %}
+        {% endfor %}
+    {% else %}
+        <div class="col-span-6 text-center text-gray-400 font-normal">There are no product under this category</div>
+    {% endif %}
+</div>
+
+{% endblock %}

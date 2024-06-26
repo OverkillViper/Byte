@@ -1,0 +1,40 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Byte</title>
+    {% tailwind_css %}
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/css/markdown.css' %}">
+    <!-- <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script> -->
+    <style>
+        .flex-container {
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="bg-primary flex-container flex min-h-screen">
+    <!-- Sidebar -->
+    <div class="basis-1/5 2xl:basis-1/6  bg-red-500">
+        {% include 'customer/sidebar.html' %}
+    </div>
+
+    <!-- Content -->
+    <div class="basis-4/5 2xl:basis-5/6 min-h-screen flex flex-col">
+        {% include 'customer/header.html' %}
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    {% include 'frontend/includes/messages.html' %}
+    {% include 'customer/address_create_modal.html' %}
+</body>
+</html>

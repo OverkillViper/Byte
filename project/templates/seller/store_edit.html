@@ -1,0 +1,49 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex justify-center items-center p-6 flex-grow">
+    <!-- Stores -->
+    <form action="/seller/store/edit/{{ store.id }}" method="POST" class="bg-primary border border-ternary rounded-lg overflow-hidden text-sm w-1/2">
+        {% csrf_token %}
+        <div class="bg-secondary p-5 font-primary text-accent-200">
+            Edit Store
+        </div>
+        <hr class="border-1 border-ternary">
+        <div class="p-5">
+            <div class="text-white font-primary">Store Name</div>
+            <input type="text" name="name" id="name" class="form-input" value="{{ store.name }}">
+        </div>
+        <input type="hidden" name="reference" id="reference" value="{{ request.GET.ref }}">
+        <hr class="border-1 border-ternary">
+        <div class="p-5">
+            <div class="text-white font-primary">Store Address</div>
+
+            <div class="grid grid-cols-2 gap-x-5">
+                <div class="text-white font-primary mt-4">Street</div>
+                <div class="text-white font-primary mt-4">City</div>
+                <input type="text" name="street" id="street" class="form-input" value="{{ store.address.street }}">
+                <input type="text" name="city" id="city" class="form-input" value="{{ store.address.city }}">
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-5">
+                <div class="text-white font-primary mt-4">District</div>
+                <div class="text-white font-primary mt-4">Country</div>
+                <input type="text" name="district" id="district" class="form-input" value="{{ store.address.district }}">
+                <input name="country"  id="country" class="form-input" list="countries" value="{{ store.address.country }}">
+                <datalist id="countries">
+                    {% for country in countries %}
+                        <option value="{{ country }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+        </div>
+        <hr class="border-1 border-ternary">
+        <div class="bg-secondary p-5 font-primary flex justify-end text-black ">
+            <button type="submit" class="bg-accent-200 px-4 py-2 rounded-md link-button uppercase font-primary" style="color: #000;">Update store</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

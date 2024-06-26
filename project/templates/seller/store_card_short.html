@@ -1,0 +1,10 @@
+<a href="/seller/store/details/{{ store.id }}">
+    <div class="bg-quarternary p-2 ms-5 my-2 rounded-md border border-quarternary hover:border-ternary transition">
+        <div class="text-white font-primary text-sm">
+            {{ store.name }}
+        </div>
+        <div class="text-gray-400 font-normal text-sm">
+            {{ store.address.district }}, {{ store.address.country }}
+        </div>
+    </div>
+</a>

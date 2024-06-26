@@ -1,0 +1,30 @@
+{% load static %}
+<div class="divide-y">
+    {% if conversations %}
+    {% for conversation in conversations %}
+        <a href="/account/conversation/{{ conversation.id }}" class="px-4 py-2 rounded-md hover:bg-secondary transition border border-primary hover:border-quarternary flex items-center">
+            {% for participant in conversation.participants.all %}
+                {% if participant != request.user %}
+                    <div class="rounded-full outline outline-2 outline-gray-400 w-10 overflow-hidden outline-offset-2">
+                        <img src="{% static 'images/avatar.png' %}" alt="" class="bg-white">
+                    </div>
+                    <div class="ms-6">
+                        <div class="text-white font-primary text-lg">{{ participant.get_full_name }}</div>
+                        <div class="text-gray-400 font-normal text-sm">
+                            {% if conversation.last_message %}
+                                <span class="font-primary">{{ conversation.last_message.sender.last_name }}:</span> {{ conversation.last_message.content }}
+                            {% else %}
+                                No messages yet
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </a>
+    {% endfor %}
+    {% else %}
+        <div class="text-gray-400 font-normal text-center">
+            You do not have any conversation
+        </div>
+    {% endif %}
+</div>

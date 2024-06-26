@@ -1,0 +1,62 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="px-8 py-4 w-2/3 mx-auto">
+    <div class="text-white font-primary text-lg">Order <span class="text-accent-200">#{{ order.id }}</span></div>
+    <div class="text-gray-400 font-normal text-sm">Placed on {{ order.created_at }}</div>
+    
+    <hr class="border-1 border-ternary my-4">
+
+    <div class="grid grid-cols-5">
+        <div class="text-accent-200 font-primary">Ordered by:</div>
+        <div class="text-white font-normal col-span-4">{{ order.customer.get_full_name }}</div>
+        <div class="text-accent-200 font-primary">Delivery address:</div>
+        <div class="text-white font-normal col-span-4">{{ order.address.get_address }}</div>
+        <div class="text-accent-200 font-primary">Payment method:</div>
+        <div class="text-white font-normal col-span-4">{% if order.payment == 'cod' %}Cash on Delivery{% else %}{{ order.payment }}{% endif %}</div>
+        <div class="text-accent-200 font-primary">Total payment:</div>
+        <div class="text-white font-normal col-span-4">৳ {{ total }}</div>
+    </div>
+
+    <hr class="border-1 border-ternary my-4">
+
+    <div class="text-accent-200 font-primary text-lg mb-6">Order items</div>
+    {% for order_item in order_items %}
+        <div class="flex p-3 bg-quarternary rounded-md items-center mb-4 text-sm">
+            <a href="/seller/store/product/{{ order_item.product.id }}" class="me-4">
+                <img src="{{ order_item.product.first_gallery.image.url }}" alt="product_image" class="w-16 aspect-square rounded-md">
+            </a>
+            <a class="flex-grow" href="/seller/store/product/{{ order_item.product.id }}">
+                <div class="text-white font-primary">{{ order_item.product.name }}</div>
+                <div class="text-accent-200 font-primary">Quantity: {{ order_item.quantity }}</div>
+                <div class="text-sm fonr-primary text-gray-400">Placed on {{ order_item.order.created_at }}</div>
+            </a>
+            <div id="order-item-{{ order_item.id }}" data-dropdown-toggle="dropdown-{{ order_item.id }}" class="flex items-center justify-center bg-quarternary border border-ternary px-4 py-2 text-accent-200 font-primary rounded-sm select-none uppercase hover:bg-ternary transition">
+                {% if order_item.status == 'processing' %} Pending {% else %} {{ order_item.status }} {% endif %}
+                <svg class="w-5 h-5 text-accent-200 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/>
+                </svg>
+            </div>
+            <div id="dropdown-{{ order_item.id }}" class="z-10 hidden bg-secondary divide-y divide-gray-100 rounded-lg shadow w-36 border border-ternary">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="order-item-{{ order_item.id }}">
+                    <li>
+                    <a href="/seller/order/change-item-status/{{ order_item.id }}/processing" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Pending</a>
+                    </li>
+                    <li>
+                    <a href="/seller/order/change-item-status/{{ order_item.id }}/accepted" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Accepted</a>
+                    </li>
+                    <li>
+                    <a href="/seller/order/change-item-status/{{ order_item.id }}/shipped" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Shipped</a>
+                    </li>
+                    <li>
+                    <a href="/seller/order/change-item-status/{{ order_item.id }}/delivered" class="block px-4 py-2 hover:text-white transition font-normal text-gray-400">Delivered</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

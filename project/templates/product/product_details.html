@@ -1,0 +1,136 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% load markdownify %}
+{% block content %}
+
+<div class="w-3/4 mx-auto flex flex-col">
+    <div class="text-white text-sm items-center flex font-normal mt-10">
+        {% for category in category_hierarchy %}
+            {% if forloop.last %}
+                <a href="/product/category/{{ category.id }}" class="hover:underline transition">{{ category.name }}</a>
+            {% else %}
+                <div>{{ category.name }}</div>
+                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"/>
+                </svg>                  
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="mx-auto flex space-x-10 mt-6">
+        <div class="basis-1/3">
+            <img src="{{ galleries.0.image.url }}" alt="product_image" class="rounded-lg" id="imagePreview">
+            <div class="grid grid-cols-5 mt-2 2xl:mt-4 gap-x-2 2xl:gap-x-4">
+                {% for gallery in galleries %}
+                    <img src="{{ gallery.image.url }}" alt="" class="rounded-md cursor-pointer bg-white" onclick="showPreview(this)">
+                {% endfor %}
+            </div>
+        </div>
+        <div class="basis-2/3 flex flex-col justify-between">
+            <div class="text-white font-primary text-xl">
+                {{ product.name }}
+            </div>
+            <div class="grid grid-cols-5">
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Price</div><div class="font-normal text-white col-span-3 2xl:col-span-4">৳ {{ product.price }}</div>
+                {% if product.discount > 0 %}
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Discount Price</div><div class="font-normal text-white col-span-3 2xl:col-span-4">৳ {{ product.discounted_price|floatformat:0 }}</div>
+                {% endif %}
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Brand</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.brand }}</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Model</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.model }}</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Stock</div><div class="font-normal {% if product.in_stock %}text-white{% else %}text-red-400{% endif %} col-span-3 2xl:col-span-4">{% if product.in_stock %}In Stock{% else %}Out of stock{% endif %}</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Warranty</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.warranty }} year(s)</div>
+                <div class="text-md text-accent-200 font-primary col-span-2 2xl:col-span-1">Item Sold</div><div class="font-normal text-white col-span-3 2xl:col-span-4">{{ product.itemSold }}</div>
+            </div>
+            <div class="flex justify-between space-x-4 text-sm">
+                {% if product.in_stock %}
+                    {% if not in_cart %}
+                    <form action="/customer/add-to-cart" method="GET" class="flex items-center">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <label for="quantity" class="text-white font-primary me-2 text-lg">Quantity:</label>
+                        <input type="text" name="quantity" id="quantity" class="rounded-md w-16 bg-quarternary border border-ternary text-white font-primary px-2 py-2 text-sm me-2 focus:ring-0 focus:border-white" maxlength="3" value="1">
+                        <button type="submit" class="bg-accent-200 px-4 py-2 link-button flex items-center rounded-md">
+                            <svg class="w-4 h-4 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
+                            </svg>
+                                
+                            <span class="font-primary uppercase ms-2 text-gray-800">Add to Cart</span>
+                        </button>
+                    </form>
+                    {% else %}
+                    <a href="/customer/cart" class="bg-accent-200 px-4 py-2 link-button flex items-center rounded-md">
+                        <svg class="w-4 h-4 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                        </svg>
+    
+                        <span class="font-primary uppercase ms-2 text-gray-800">View in Cart</span>
+                    </a>
+                    {% endif %}
+                {% else %}
+                    {% if not is_wishlisted %}
+                    <a href="/customer/add-to-wishlist/{{ product.id }}" class="bg-quarternary px-4 py-2 link-button flex items-center rounded-md">
+                        <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                        </svg>
+                        <span class="font-primary uppercase ms-2">Add to wishlist</span>
+                    </a>
+                    {% else %}
+                    <a href="/customer/remove-from-wishlist/{{ product.id }}" class="bg-quarternary px-4 py-2 link-button flex items-center rounded-md">
+                        <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>                      
+                        <span class="font-primary uppercase ms-2">Remove from wishlist</span>
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <hr class="border-1 border-ternary my-6">
+    <div class="flex items-center">
+        <div class=" text-accent-300 font-primary text-lg">Store</div>
+        <a class=" text-white font-normal bg-quarternary px-4 py-2 rounded-md ms-6 link-button" href="/store/{{ product.store.id }}">
+            {{ product.store.name }}
+        </a>
+    </div>
+    
+    <hr class="border-1 border-ternary my-6">
+    <div class="text-accent-300 font-primary text-lg">Description</div>
+    <div class="text-white font-normal">
+        {{ product.description|markdownify }}
+    </div>
+    <hr class="border-1 border-ternary my-6">
+    <div class="text-accent-300 font-primary text-lg">Product Attributes</div>
+    <div>
+        {% if attribute_count > 0 %}
+        <div class="text-white">
+            <ul>
+                {% for item in attribute_tree %}
+                    {% include 'product/product_attribute_tree.html' with item=item %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="text-gray-300 font-normal text-center my-2">This product has no attributes</div>
+        {% endif %}
+    </div>
+    {% if similar_products %}
+    <hr class="border-1 border-ternary my-6">
+    <div class="text-accent-300 font-primary text-lg">Similar products</div>
+    <div class="grid grid-cols-5 gap-4 mt-4">
+        {% for product in similar_products %}
+            {% include 'product/product_card.html' %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function showPreview(element) {
+        var preview = document.getElementById('imagePreview')
+
+        preview.src = element.src
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load static %}
+<a class="bg-secondary p-6 text-center rounded-md border border-secondary hover:border-ternary hover:bg-quarternary transition" href="/store/{{ store.store.id }}">
+    <div>
+        <div class="flex justify-center">
+            <div class="bg-ternary rounded-full text-white text-4xl font-normal px-5 py-2">
+                {{ store.store.name.0 }}
+            </div>
+        </div>
+        <div class="text-white font-primary text-lg mt-4">
+            {{ store.store.name }}
+        </div>
+        <div class="text-gray-400 font-normal">
+            {% if store.total_sale.total_quantity is None %} 0 {% else %} {{ store.total_sale.total_quantity }} {% endif %} sells
+        </div>
+    </div>
+</a>

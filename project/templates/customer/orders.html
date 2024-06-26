@@ -1,0 +1,30 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="w-2/3 mx-auto mt-6">
+
+    {% if orders %}
+        {% for order in orders %}
+            <div class="p-4 hover:bg-quarternary transition cursor-default rounded-md flex justify-between items-center attribute">
+                <div>
+                    <div class="text-white font-primary">Order <span class="text-accent-200">#{{ order.id }}</span></div>
+                    <div class="flex items-center mt-2">
+                        <div class="uppercase font-primary text-white bg-ternary px-2 py-1 text-sm me-2 rounded-sm">{{ order.status }}</div>
+                        <div class="text-gray-400 font-normal">Placed on {{ order.created_at }}</div>
+                    </div>
+                </div>
+                <div>
+                    <a href="/customer/order/details/{{ order.id }}" class="bg-quarternary border border-ternary rounded-md px-4 py-2 font-normal uppercase text-white text-xs options">View Details</a>
+                </div>
+            </div>
+            <hr class="border border-quarternary">
+        {% endfor %}
+    {% else %}
+        <div class="text-gray-400 font-normal text-center">Currently you have no orders. Please order.</div>
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

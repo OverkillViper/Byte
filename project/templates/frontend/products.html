@@ -1,0 +1,24 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="text-md text-2xl font-primary select-none">
+    <span class="text-accent-200">#</span>
+    <span class="text-white">
+        {% if request.GET.filter == 'newest' %}
+        Just arrived
+        {% elif request.GET.filter == 'popular' %}
+        Most Popular
+        {% else %}
+        Products
+        {% endif %}
+    </span>
+</div>
+
+<div class="grid grid-cols-6 gap-4 mt-4">
+    {% for product in products %}
+        {% include 'product/product_card.html' %}
+    {% endfor %}
+</div>
+
+{% endblock %}

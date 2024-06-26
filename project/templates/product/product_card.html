@@ -1,0 +1,46 @@
+{% load static %}
+<div class="bg-secondary xl:p-2 2xl:p-4 rounded-md select-none cursor-default hover:-translate-y-1 transition hover:scale-105 ease-in" href="#">
+    <div class="flex justify-between">
+        <div class="flex items-center">
+            <svg class="w-4 h-4 text-accent-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2.5" d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
+            </svg>
+            <span class="text-sm font-normal text-white ms-2">{{ product.rating }}</span>
+        </div>
+        <div class="text-accent-200 font-normal">
+            {% if product.discount > 0 %}-{{ product.discount }}%{% else %}&nbsp{% endif %}
+        </div>
+    </div>
+    <a href="/product/details/{{ product.id }}" class="flex justify-center items-center bg-white rounded-md my-4">
+        <img src="{{ product.first_gallery.image.url }}" alt="product_image" class="w-28 h-28">
+    </a>
+    <div class="font-primary text-md text-white w-30 truncate mb-0">
+        <a href="/product/details/{{ product.id }}">{{ product.name }}</a>
+    </div>
+    <div class="text-gray-300 font-normal text-sm hover:underline">
+        <a href="/category/{{ product.category.id }}">{{ product.category.name }}</a>
+    </div>
+    <div class="flex justify-between">
+        <div class="text-accent-200 font-primary">৳ {{ product.price }}</div>
+        <div class="flex">
+            {% if not product.in_stock %}
+            <a href="/customer/add-to-wishlist/{{ product.id }}" class="text-white hover:text-accent-300 transition">
+                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                </svg>
+            </a>
+            {% else %}
+            <form action="/customer/add-to-cart" method="GET" class="flex items-center">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="quantity" id="quantity" class="rounded-md w-16 bg-quarternary border border-ternary text-white font-primary px-2 py-2 text-sm me-2" maxlength="3" value="1">
+                <button type="submit" class="text-white hover:text-accent-300 transition">
+                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
+                    </svg>
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>

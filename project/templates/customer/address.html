@@ -1,0 +1,43 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex justify-end w-3/4 mx-auto mt-6">
+    <div class="flex items-center text-sm font-primary px-4 py-2 bg-accent-200 link-button rounded-md" style="color: #1e1e1e;" onclick="openCreateModal()">
+        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+        </svg>
+        <span class="ms-2 uppercase">
+            Add new address
+        </span>        
+    </div>
+</div>
+<div class="w-3/4 mx-auto mt-4">
+    {% if addresses %}
+    {% for address in addresses %}
+        <div class="px-4 py-2 hover:bg-quarternary transition flex items-center rounded-md attribute">
+            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"/>
+            </svg>
+            <div class="ms-2 cursor-default flex-grow">
+                <div class="font-primary text-white">{{ address.title }}</div>
+                <div class="font-normal text-gray-400">{{ address.street }}, {{ address.city }}, {{ address.district }}, {{ address.country }}</div>
+            </div>
+            <div class="options">
+                <a href="/customer/delete-address/{{ address.id }}" class="bg-secondary border border-ternary rounded-md p-2 hover:bg-ternary transition ms-2">
+                    <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                    </svg>                      
+                </a>
+            </div>                  
+        </div>
+    {% endfor %}
+    {% else %}
+    <div class="text-center font-normal text-gray-400">
+        No address found. Please add a new address
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

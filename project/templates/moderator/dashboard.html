@@ -1,0 +1,159 @@
+{% extends 'moderator/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="m-8">
+    <div class="text-white font-normal">Welcome</div>
+    <div class="text-accent-200 font-primary text-2xl">{{ request.user.get_full_name }}</div>
+</div>
+<div class="mx-8">
+    <hr class="border-1 border-quarternary">
+</div>
+
+<div>
+    <div class="grid grid-cols-6 gap-4 m-6 select-none">
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Products</div>
+            <div class="text-accent-200 font-primary text-lg">{{ product_count }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Customers</div>
+            <div class="text-accent-200 font-primary text-lg">{{ customer_count }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Seller</div>
+            <div class="text-accent-200 font-primary text-lg">{{ seller_count }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Stores</div>
+            <div class="text-accent-200 font-primary text-lg">{{ store_count }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Sales</div>
+            <div class="text-accent-200 font-primary text-lg">{{ sell_count }}</div>
+        </div>
+        <div class="bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Wishlists</div>
+            <div class="text-accent-200 font-primary text-lg">{{ wishlist_count }}</div>
+        </div>
+
+        <div class="col-span-2 bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Payment methods</div>
+            <canvas id="payment_methods"></canvas>
+        </div>
+        <div class="col-span-4 bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+            <div class="text-white font-normal text-sm">Sales</div>
+            <canvas id="sale-timeline"></canvas>
+        </div>
+    </div>
+</div>
+<div class="mx-6 my-4 bg-secondary rounded-md shadow-md p-4 border border-quarternary">
+    <div class="text-white font-normal text-sm mb-4">Top Stores</div>
+    <div class="grid grid-cols-3 gap-x-4">
+
+    {% if top_stores %}
+        {% for store in top_stores %}
+            <a class="bg-quarternary p-4 rounded-md flex border border-quarternary hover:border-ternary transition" href="/moderator/store/details/{{ store.store.id }}">
+                <div class="bg-ternary text-white font-primary w-10 me-4 flex justify-center items-center rounded-md text-lg">
+                    {{ forloop.counter }}
+                </div>
+                <div>
+                    <div class="text-accent-200 font-primary">{{ store.store.name }}</div>
+                    <div class="text-white text-sm font-normal">{{ store.total_sale.total_quantity }} products sold</div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="text-gray-400 font-normal">No stores registered</div>
+    {% endif %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script type="text/javascript">
+
+    const payment_method_data = {
+        labels: [
+            'Cashless',
+            'Cash on Delivery'
+        ],
+        datasets: [{
+            data: [{{ cash_payment|safe }}, {{ cashless_payment|safe }}],
+            backgroundColor: [
+                '#72b3f4',
+                'rgb(172, 148, 250)',
+            ],
+            hoverOffset: 4,
+            borderColor: [ 
+                '#131517', 
+                '#131517',
+            ],
+            hoverBorderColor: [
+                '#3f4148', 
+                '#3f4148', 
+            ],
+        }]
+    };
+
+    const payment_method_config = {
+        type: 'doughnut',
+        data: payment_method_data,
+        
+        options: {
+            responsive: true,
+            cutout:'80%',
+            tooltip: {
+                enabled: false
+            }
+        }
+        
+    };
+
+    const payment_method_ctx = document.getElementById("payment_methods").getContext('2d');
+    const payment_method_Chart = new Chart(payment_method_ctx, payment_method_config);
+
+    const sale_labels = [];
+    const sale_data = [];
+
+    {% for item in sell_by_day %}
+        sale_labels.push("{{ item.day.day }}");
+        sale_data.push({{ item.count }});
+    {% endfor %}
+
+    const sale_ctx = document.getElementById('sale-timeline').getContext('2d');
+    const sale_Chart = new Chart(sale_ctx, {
+        type: 'line',
+        data: {
+            labels: sale_labels,
+            datasets: [{
+                label: 'Sales',
+                data: sale_data,
+                backgroundColor: '#1a1c20',
+                borderColor: '#72b3f4',
+                borderWidth: 1,
+                tension: 0
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    },
+                },
+            },
+            maintainAspectRatio: false,
+        }
+    });
+
+</script>
+
+{% endblock %}

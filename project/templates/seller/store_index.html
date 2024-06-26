@@ -1,0 +1,36 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="px-8 py-4">
+    <!-- Stores -->
+    <div class="">
+        <div class="flex justify-between items-center">
+            <div class="text-grey-200 font-primary text-lg select-none">Stores</div>
+            <a href="/seller/create-store?ref=dashboard" class="bg-accent-200 px-4 py-2 uppercase link-button rounded-md font-primary flex items-center text-sm">
+                <svg class="w-4 h-4 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                </svg>
+                <div class="text-black ms-2">Add store</div>
+            </a>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-x-5">
+            {% for store in stores_with_product %}
+            <a class="flex bg-secondary border rounded-md py-3 px-6 border-ternary mb-3 hover:bg-quarternary transition" href="/seller/store/details/{{ store.store.id }}">
+                <div class="flex-grow">
+                    <div class="text-white font-primary text-md">{{ store.store.name }}</div>
+                    <div class="text-sm text-grey-200 font-normal">{{ store.store.address.district }}, {{ store.store.address.country }}</div>
+                </div>
+                <div class="text-end">
+                    <div class="text-accent-200 font-primary">{{ store.totalProduct }}</div>
+                    <div class="text-white font-normal text-sm">Product(s)</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+    </div>
+    
+</div>
+
+{% endblock %}

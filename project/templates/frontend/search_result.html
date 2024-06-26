@@ -1,0 +1,22 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="text-md text-2xl font-primary select-none">
+    <span class="text-accent-200">#</span>
+    <span class="text-white">
+        Search results for: {{ request.GET.q }}
+    </span>
+</div>
+
+<div class="grid grid-cols-6 gap-4 mt-4">
+    {% if products %}
+    {% for product in products %}
+        {% include 'product/product_card.html' %}
+    {% endfor %}
+    {% else %}
+        <div class="text-gray-400 font-normal col-span-6 text-center">No product found with this criteria</div>
+    {% endif %}
+</div>
+
+{% endblock %}

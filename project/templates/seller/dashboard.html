@@ -1,0 +1,164 @@
+{% extends 'seller/index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="m-8">
+    <div class="text-white font-normal">Welcome</div>
+    <div class="text-accent-200 font-primary text-2xl">{{ request.user.get_full_name }}</div>
+</div>
+<div class="mx-8">
+    <hr class="border-1 border-quarternary">
+</div>
+
+<div class="grid grid-cols-3 2xl:grid-cols-2 px-8 py-4 gap-x-5">
+    <!-- Stores -->
+    <div class="">
+        <div class="flex justify-between items-center">
+            <a class="text-grey-200 font-primary text-lg select-none" href="/seller/stores">Stores</a>
+            <a href="/seller/create-store?ref=dashboard" class="bg-accent-200 px-4 py-2 uppercase link-button rounded-md font-primary flex items-center text-sm">
+                <svg class="w-4 h-4 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                </svg>
+                <div class="text-black ms-2">Add store</div>
+            </a>
+        </div>
+        <div class="mt-4">
+            {% for store in stores|slice:":3" %}
+            <a class="flex flex-col bg-secondary border rounded-md py-3 px-6 border-ternary mt-3 hover:bg-quarternary transition" href="/seller/store/details/{{ store.id }}">
+                <div class="text-white font-primary text-md">{{ store.name }}</div>
+                <div class="text-sm text-grey-200 font-normal">{{ store.address.district }}, {{ store.address.country }}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 col-span-2 2xl:col-span-1">
+        <div class="bg-secondary rounded-lg p-4">
+            <div class="text-accent-200 font-primary rounded-md">Orders</div>
+            <canvas id="order-status"></canvas>
+        </div>
+        <div class="bg-secondary rounded-lg p-4">
+            <div class="text-accent-200 font-primary">Stats</div>
+            <div class="flex font-primary ms-3 my-2">
+                <div class="text-white flex-grow">Stores</div>
+                <div class="text-accent-200 font-normal min-w-10 text-end pe-3">{{ stores.count }}</div>
+            </div>
+            <div class="flex font-primary ms-3 my-2">
+                <div class="text-white flex-grow">Products</div>
+                <div class="text-accent-200 font-normal min-w-10 text-end pe-3">{{ product_count }}</div>
+            </div>
+            <div class="flex font-primary ms-3 my-2">
+                <div class="text-white flex-grow">Orders</div>
+                <div class="text-accent-200 font-normal min-w-10 text-end pe-3">{{ order_count }}</div>
+            </div>
+            <div class="flex font-primary ms-3 my-2">
+                <div class="text-white flex-grow">Total Sales</div>
+                <div class="text-accent-200 font-normal min-w-10 text-end pe-3">৳ {{ total_sale }} ({{item_sold}})</div>
+            </div>
+            <div class="flex font-primary ms-3 my-2">
+                <div class="text-white flex-grow">Avarage Rating</div>
+                <div class="text-accent-200 font-normal min-w-10 text-end pe-3">{{ avarage_rating|floatformat:2 }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="px-8 py-4 min-h-72">
+    <div class="text-white text-lg font-primary">Monthly sale</div>
+    <canvas id="order-timeline"></canvas>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script type="text/javascript">
+
+    const status_data = {
+        labels: [
+            'processing',
+            'accepted',
+            'shipped',
+            'delivered'
+        ],
+        datasets: [{
+            data: [{{ processing|safe }}, {{ accepted|safe }}, {{ shipped|safe }}, {{ delivered|safe }}],
+            backgroundColor: [
+                '#72b3f4',
+                'rgb(172, 148, 250)',
+                'rgb(255, 138, 76)',
+                'rgb(49, 196, 141)',
+            ],
+            hoverOffset: 4,
+            borderColor: [ 
+                '#131517', 
+                '#131517', 
+                '#131517', 
+                '#131517', 
+            ],
+            hoverBorderColor: [
+                '#3f4148', 
+                '#3f4148', 
+                '#3f4148', 
+                '#3f4148',
+            ],
+        }]
+    };
+
+    const status_config = {
+        type: 'doughnut',
+        data: status_data,
+        
+        options: {
+            responsive: true,
+            cutout:'80%',
+            tooltip: {
+                enabled: false
+            }
+        }
+        
+    };
+
+    const status_ctx = document.getElementById("order-status").getContext('2d');
+    const status_Chart = new Chart(status_ctx, status_config);
+
+    const order_labels = [];
+    const order_data = [];
+
+    {% for item in sell_by_day %}
+        order_labels.push("{{ item.day.day }}");
+        order_data.push({{ item.count }});
+    {% endfor %}
+
+    const order_ctx = document.getElementById('order-timeline').getContext('2d');
+    const order_Chart = new Chart(order_ctx, {
+        type: 'bar',
+        data: {
+            labels: order_labels,
+            datasets: [{
+                label: 'Products',
+                data: order_data,
+                backgroundColor: '#1a1c20',
+                borderColor: '#72b3f4',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    },
+                },
+            },
+            maintainAspectRatio: false,
+        }
+    });
+
+</script>
+{% endblock %}
