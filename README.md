@@ -1,72 +1,113 @@
 # Byte Ecommerce
 **A Django based ecommerce project**
 
+## Framework
+<p align="center">
+<img src="https://static.djangoproject.com/img/logos/django-logo-positive.png" alt="drawing" width="120"/>
+</p>
+<p align="center">
+<font size="5">
+<b>Djnago</b>
+</font>
+</p>
+
 ## Features
-- Multi-role authentication
-- Roles:
-  - Customer
-  - Seller
-  - Moderator
+✅ Multi-role authentication <br>
+✅ Roles:
 
-### Authentication
-- Register (Email based)
-- Login
-- Account verification via email
-- Reset lost password via email
+| Customer | Seller | Moderator |
+|----------|--------|-----------|
 
-### Common Role Features
-- Nofitications
-- Basic Chat System
+<details>
+  <summary><b>Authentication</b></summary>
+  ✅ Register (Email based)
+  <br>✅ Login
+  <br>✅ Account verification via email
+  <br>✅ Reset lost password via email
+</details>
 
-### Customer Features
-- Add product to cart
-- Add product to wishlist
-- Get notification when wishlisted product re-stocks
-- Get notification on product delivery stage change
-- Rate product after delivery
-- Track orders. View order details
-- Chat with seller
-- Maintain multiple delivery addresses
-- Both Cash on Delivery and Cashless Payment accepted
-- Buy product from different seller in same order
-- Dashboard:
-  - Standing orders
-  - Completed orders
-  - Total product purchased
-  - Total money spent
-  - Total Addresses
-  - Total Wishlists
-  - Percentage of payment method selected
-  - Monthly purchases
+<details>
+  <summary><b>Common Role Features</b></summary>
+  ✅ Nofitications
+  <br>✅ Basic Chat System
+</details>
 
-### Seller Features
-- Maintain multiple stores
-- Product CRUD
-- Add product attributes
-- Add multiple images for product
-- Set discount on product
-- Change order status
-- Notified on order placed
-- Dashboard:
-  - Track order status
-  - Total sales
-  - Total products
-  - Total stores
-  - Total Orders
-  - Avarage Rating
-  - Monthly delivered orders
+<details>
+  <summary><b>Customer Features</b></summary>
+  ✅ Add product to cart
+  <br>✅ Add product to wishlist
+  <br>✅ Get notification when wishlisted product re-stocks
+  <br>✅ Get notification on product delivery stage change
+  <br>✅ Rate product after delivery
+  <br>✅ Track orders. View order details
+  <br>✅ Chat with seller
+  <br>✅ Maintain multiple delivery addresses
+  <br>✅ Both Cash on Delivery and Cashless Payment accepted
+  <br>✅ Buy product from different seller in same order
+  <br>✅ <b>Dashboard:</b>
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Standing orders
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Completed orders
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total product purchased
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total money spent
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Addresses
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Wishlists
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Percentage of payment method selected
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Monthly purchases
+</details>
 
-### Moderator Features
-- Can delete product
-- Can delete stores
-- Maintain registered accounts
-- Add or delete category
-- Dashboard
-  - Total Products
-  - Total customers
-  - Total Stored
-  - Total Seller
-  - Total Sales
-  - Payments methods
-  - Monthly sales
-  - Top Stores
+<details>
+  <summary><b>Seller Features</b></summary>
+  ✅ Maintain multiple stores
+  <br>✅ Add product to wishlist
+  <br>✅ Product CRUD
+  <br>✅ Add product attributes
+  <br>✅ Add multiple images for product
+  <br>✅ Set discount on product
+  <br>✅ Change order status
+  <br>✅ Notified on order placed
+  <br>✅ <b>Dashboard:</b>
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Track order status
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total sales
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total products
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total stores
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Orders
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Avarage Rating
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Monthly delivered orders
+</details>
+
+<details>
+  <summary><b>Moderator Features</b></summary>
+  ✅ Can delete product
+  <br>✅ Can delete stores
+  <br>✅ Maintain registered accounts
+  <br>✅ Add or delete category
+  <br>✅ <b>Dashboard:</b>
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Products
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total customers
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Stored
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Seller
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Total Sales
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Payments methods
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Monthly sales
+  <br>&nbsp&nbsp&nbsp&nbsp✅ Top Stores
+</details>
+
+## Database Schema
+![DB Schema](https://raw.githubusercontent.com/OverkillViper/Byte/27a8d4d5f7eed8b82e823bfcc35bb8fe554516cf/App%20Design-Page-3.drawio.svg?token=A37FQMOESHN3TJMG3NMFQB3GQAOIG)
+
+## Installation
+```shell
+cd project
+```
+Install virtual enviroment
+```shell
+pip install -r requirements.txt
+```
+Start virtual environment
+```shell
+..\venv\Scripts\activate
+```
+Start Server
+```shell
+python manage.py runserver 0.0.0.0:8000
+```
