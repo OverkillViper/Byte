@@ -1,6 +1,9 @@
 # Byte Ecommerce
 **A Django based ecommerce project**
 
+## Landing Page
+![Landing Page](https://raw.githubusercontent.com/OverkillViper/Byte/main/Homepage.png?token=GHSAT0AAAAAACUDZL4DMP3F6HCNYQDRWFZOZUAD7SA)
+
 ## Framework
 <p align="center">
 <img src="https://static.djangoproject.com/img/logos/django-logo-positive.png" alt="drawing" width="120"/>
