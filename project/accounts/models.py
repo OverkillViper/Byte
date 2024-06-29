@@ -100,7 +100,7 @@ class Conversation(models.Model):
     id           = HashidAutoField(primary_key=True)
     participants = models.ManyToManyField(Account, related_name='conversations')
 
-    created_at      = models.DateTimeField(auto_now_add=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return ", ".join([user.get_full_name for user in self.participants.all()])
