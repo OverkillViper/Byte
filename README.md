@@ -96,7 +96,7 @@
 </details>
 
 ## Database Schema
-![DB Schema](https://raw.githubusercontent.com/OverkillViper/Byte/27a8d4d5f7eed8b82e823bfcc35bb8fe554516cf/App%20Design-Page-3.drawio.svg?token=A37FQMOESHN3TJMG3NMFQB3GQAOIG)
+![DB Schema](https://raw.githubusercontent.com/OverkillViper/Byte/e9ba2f47995f0bdddfebe9e8d77e32edf61563c0/App%20Design-Page-3.drawio.svg?token=A37FQMMDZCD2GQRRAQ2HGILGQAQDC)
 
 ## Installation
 ```shell
