@@ -2,7 +2,7 @@
 **A Django based ecommerce project**
 
 ## Landing Page
-![Landing Page](https://raw.githubusercontent.com/OverkillViper/Byte/main/Homepage.png?token=GHSAT0AAAAAACUDZL4DMP3F6HCNYQDRWFZOZUAD7SA)
+![Homepage](https://github.com/OverkillViper/Byte/assets/117332017/d2a5909b-cfb2-4f2b-a735-8e691f0600f0)
 
 ## Framework
 <p align="center">
@@ -96,7 +96,7 @@
 </details>
 
 ## Database Schema
-![DB Schema](https://raw.githubusercontent.com/OverkillViper/Byte/e9ba2f47995f0bdddfebe9e8d77e32edf61563c0/App%20Design-Page-3.drawio.svg?token=A37FQMMDZCD2GQRRAQ2HGILGQAQDC)
+![db sCHEMA](https://github.com/OverkillViper/Byte/assets/117332017/51d738dc-4451-4a0d-8c73-2f7e9d144961)
 
 ## Installation
 ```shell
