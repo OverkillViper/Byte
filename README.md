@@ -10,7 +10,7 @@
 </p>
 <p align="center">
 <font size="5">
-<b>Djnago</b>
+<b>Django</b>
 </font>
 </p>
 
